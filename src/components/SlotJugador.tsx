@@ -7,10 +7,10 @@ import { partirNombre } from "@/utils/partirNombre";
 
 type Size = "tiny" | "small" | "normal";
 
-const SIZES: Record<Size, { circle: number; font: number }> = {
-  tiny: { circle: 36, font: 8 },
-  small: { circle: 44, font: 9 },
-  normal: { circle: 52, font: 10 },
+const SIZES: Record<Size, { circle: number; font: number; width: number }> = {
+  tiny: { circle: 36, font: 8, width: 60 },
+  small: { circle: 44, font: 9, width: 72 },
+  normal: { circle: 52, font: 10, width: 78 },
 };
 
 type Props = {
@@ -55,12 +55,14 @@ export function SlotJugador({
     flexDirection: "column",
     alignItems: "center",
     gap: 4,
-    width: 78,
+    width: s.width,
     background: "transparent",
     border: "none",
     padding: 4,
     cursor: artista ? "grab" : "pointer",
-    touchAction: "none",
+    // Permitimos scroll vertical hasta que el drag se active explícitamente.
+    // dnd-kit (TouchSensor con delay) bloquea touchAction al activarse.
+    touchAction: "manipulation",
     transform: draggable.transform
       ? `translate3d(${draggable.transform.x}px, ${draggable.transform.y}px, 0)`
       : undefined,

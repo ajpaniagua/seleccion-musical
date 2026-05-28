@@ -85,7 +85,10 @@ export default function CrearPage() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 8 } })
+    // En móvil: press-and-hold de 250ms y permitimos hasta 14px de "wobble"
+    // del dedo antes de cancelar. Más generoso que los defaults para que el
+    // drag se active con confianza sin pelear con el scroll vertical.
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 14 } })
   );
 
   function manejarDragEnd(e: DragEndEvent) {
