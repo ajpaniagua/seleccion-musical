@@ -650,10 +650,25 @@ function VistaCromo({
   const [generando, setGenerando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
   const [movil, setMovil] = useState(false);
+  const [escala, setEscala] = useState(1);
 
   // Detecta solo en cliente (esDispositivoMovil necesita navigator)
   useEffect(() => {
     setMovil(esDispositivoMovil());
+  }, []);
+
+  // El cromo mide 480px de ancho. Si el viewport es menor, escalamos
+  // visualmente para que entre con margen, pero el DOM sigue a tamaño real
+  // (la captura quita el transform momentáneamente para generar el PNG a 1080×1920).
+  useEffect(() => {
+    function calcular() {
+      const margenLateral = 32;
+      const disponible = window.innerWidth - margenLateral;
+      setEscala(disponible >= 480 ? 1 : Math.max(0.5, disponible / 480));
+    }
+    calcular();
+    window.addEventListener("resize", calcular);
+    return () => window.removeEventListener("resize", calcular);
   }, []);
 
   // Mientras la VistaCromo esté montada, pintamos body y html en gris oscuro
@@ -694,7 +709,36 @@ function VistaCromo({
         const r = await guardarSeleccion(seleccion);
         if (r) yaGuardada.current = true;
       }
-      const blob = await generarPngCromo(cromoRef.current);
+      // Quitamos el scale durante la captura. html2canvas captura lo que
+      // ve en pantalla, así que con scale aplicado generaría un PNG pequeño.
+      // Sacamos también el cromo de la viewport para que el usuario no vea
+      // el flash a tamaño real.
+      const wrap = cromoRef.current;
+      const prev = {
+        transform: wrap.style.transform,
+        position: wrap.style.position,
+        left: wrap.style.left,
+        top: wrap.style.top,
+        zIndex: wrap.style.zIndex,
+      };
+      wrap.style.transform = "none";
+      wrap.style.position = "fixed";
+      wrap.style.left = "-10000px";
+      wrap.style.top = "0";
+      wrap.style.zIndex = "-1";
+      await new Promise<void>((r) => requestAnimationFrame(() => r()));
+
+      let blob: Blob;
+      try {
+        blob = await generarPngCromo(cromoRef.current);
+      } finally {
+        wrap.style.transform = prev.transform;
+        wrap.style.position = prev.position;
+        wrap.style.left = prev.left;
+        wrap.style.top = prev.top;
+        wrap.style.zIndex = prev.zIndex;
+      }
+
       if (movil) {
         // En móvil: abrir el sheet nativo de compartir. Si el usuario lo cancela
         // o el navegador no soporta share, caemos a descarga directa.
@@ -728,8 +772,25 @@ function VistaCromo({
         gap: 24,
       }}
     >
-      <div ref={cromoRef}>
-        <CromoFinal seleccion={seleccion} />
+      <div
+        style={{
+          // Reserva el espacio que ocupa el cromo escalado en el layout
+          width: 480 * escala,
+          height: 853 * escala,
+          flexShrink: 0,
+        }}
+      >
+        <div
+          ref={cromoRef}
+          style={{
+            width: 480,
+            height: 853,
+            transformOrigin: "top left",
+            transform: `scale(${escala})`,
+          }}
+        >
+          <CromoFinal seleccion={seleccion} />
+        </div>
       </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
         <button
