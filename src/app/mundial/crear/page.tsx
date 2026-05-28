@@ -8,7 +8,7 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Banquillo } from "@/components/Banquillo";
 import { Buscador } from "@/components/Buscador";
 import { Campo, type SlotRef } from "@/components/Campo";
@@ -16,7 +16,12 @@ import { CromoFinal } from "@/components/CromoFinal";
 import { SlotJugador } from "@/components/SlotJugador";
 import { guardarSeleccion } from "@/lib/api";
 import { COLORS } from "@/lib/colores";
-import { compartirArchivo, descargarBlob, generarPngCromo } from "@/utils/generarPng";
+import {
+  compartirArchivo,
+  descargarBlob,
+  esDispositivoMovil,
+  generarPngCromo,
+} from "@/utils/generarPng";
 import {
   intercambiarSlots,
   parseSlotId,
@@ -619,6 +624,12 @@ function VistaCromo({
   const cromoRef = useRef<HTMLDivElement>(null);
   const [generando, setGenerando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
+  const [movil, setMovil] = useState(false);
+
+  // Detecta solo en cliente (esDispositivoMovil necesita navigator)
+  useEffect(() => {
+    setMovil(esDispositivoMovil());
+  }, []);
 
   const nombreArchivo = useMemo(() => {
     const slug = (seleccion.usuario || "mi-seleccion")
@@ -643,10 +654,18 @@ function VistaCromo({
         if (r) yaGuardada.current = true;
       }
       const blob = await generarPngCromo(cromoRef.current);
-      const compartido = await compartirArchivo(blob, nombreArchivo);
-      if (!compartido) {
+      if (movil) {
+        // En móvil: abrir el sheet nativo de compartir. Si el usuario lo cancela
+        // o el navegador no soporta share, caemos a descarga directa.
+        const compartido = await compartirArchivo(blob, nombreArchivo);
+        if (!compartido) {
+          descargarBlob(blob, nombreArchivo);
+          setAviso("Imagen descargada. Ya puedes subirla a Stories.");
+        }
+      } else {
+        // En escritorio: descarga directa, sin sheet del SO.
         descargarBlob(blob, nombreArchivo);
-        setAviso("Imagen descargada. Súbela a Stories, X o WhatsApp.");
+        setAviso("Imagen descargada. La encuentras en tu carpeta de descargas.");
       }
     } catch (e) {
       console.error("[cromo] error generando PNG:", e);
@@ -708,7 +727,11 @@ function VistaCromo({
             boxShadow: `4px 4px 0 ${COLORS.text}`,
           }}
         >
-          {generando ? "GENERANDO…" : "COMPARTE TU SELECCIÓN"}
+          {generando
+            ? "GENERANDO…"
+            : movil
+              ? "COMPARTE TU SELECCIÓN"
+              : "DESCARGAR IMAGEN"}
         </button>
       </div>
       {aviso && (
@@ -736,8 +759,9 @@ function VistaCromo({
           textAlign: "center",
         }}
       >
-        Pulsa el botón para descargar la imagen y compartirla en Stories,
-        X o WhatsApp.
+        {movil
+          ? "Pulsa el botón para abrir el panel de compartir y subirla a Stories, WhatsApp o X."
+          : "Pulsa el botón para descargar la imagen. Luego súbela a Stories, X o WhatsApp."}
       </p>
     </main>
   );
