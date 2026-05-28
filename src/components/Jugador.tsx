@@ -93,10 +93,10 @@ export function Jugador({
             style={{
               fontSize: s.font,
               fontWeight: 900,
-              color: COLORS.bg,
+              color: colorTexto,
               letterSpacing: 0.2,
               fontStyle: "italic",
-              textShadow: "0 1px 2px rgba(0,0,0,0.9)",
+              textShadow: sombraTexto,
               whiteSpace: "nowrap",
               marginTop: 1,
             }}
