@@ -195,11 +195,33 @@ export default function CrearPage() {
     }
   }
 
+  // Cuando mostramos el cromo, empujamos una entrada al historial para que
+  // "atrás" del navegador vuelva al editor en lugar de a la landing. Si el
+  // usuario pulsa atrás (popstate), salimos del cromo sin perder la selección.
+  useEffect(() => {
+    if (!mostrarCromo) return;
+    window.history.pushState({ vista: "cromo" }, "", "?cromo=1");
+
+    function manejarPop() {
+      setMostrarCromo(false);
+    }
+    window.addEventListener("popstate", manejarPop);
+    return () => {
+      window.removeEventListener("popstate", manejarPop);
+    };
+  }, [mostrarCromo]);
+
   if (mostrarCromo && valida) {
     return (
       <VistaCromo
         seleccion={seleccion}
-        onVolver={() => setMostrarCromo(false)}
+        onVolver={() => {
+          // Usamos history.back() en vez de setear el state directamente:
+          // dispara nuestro popstate listener (que apaga mostrarCromo) y
+          // de paso limpia la entrada "?cromo=1" del historial.
+          if (typeof window !== "undefined") window.history.back();
+          else setMostrarCromo(false);
+        }}
       />
     );
   }
