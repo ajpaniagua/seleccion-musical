@@ -651,6 +651,19 @@ function VistaCromo({
   const [aviso, setAviso] = useState<string | null>(null);
   const [movil, setMovil] = useState(false);
   const [escala, setEscala] = useState(1);
+  const [alturaCromo, setAlturaCromo] = useState(640);
+
+  // Observa la altura natural del cromo (cambia según contenido) para que el
+  // wrapper escalado pueda reservar el espacio correcto en el layout.
+  useEffect(() => {
+    if (!cromoRef.current) return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h && h > 0) setAlturaCromo(h);
+    });
+    ro.observe(cromoRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   // Detecta solo en cliente (esDispositivoMovil necesita navigator)
   useEffect(() => {
@@ -774,9 +787,9 @@ function VistaCromo({
     >
       <div
         style={{
-          // Reserva el espacio que ocupa el cromo escalado en el layout
+          // Reserva el espacio escalado en el layout
           width: 480 * escala,
-          height: 853 * escala,
+          height: alturaCromo * escala,
           flexShrink: 0,
         }}
       >
@@ -784,7 +797,6 @@ function VistaCromo({
           ref={cromoRef}
           style={{
             width: 480,
-            height: 853,
             transformOrigin: "top left",
             transform: `scale(${escala})`,
           }}

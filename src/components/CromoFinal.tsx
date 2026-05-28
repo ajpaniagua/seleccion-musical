@@ -25,13 +25,13 @@ export function CromoFinal({ seleccion }: Props) {
     <div
       style={{
         width: 480,
-        height: 853,
         background: "#1a1410",
         position: "relative",
         boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
+        padding: "20px 0",
         backgroundImage: `
           radial-gradient(circle at 10% 10%, rgba(212,162,46,0.28) 0%, transparent 45%),
           radial-gradient(circle at 90% 90%, rgba(212,162,46,0.20) 0%, transparent 45%)
@@ -41,29 +41,6 @@ export function CromoFinal({ seleccion }: Props) {
     >
       <div
         style={{
-          height: 111,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            color: COLORS.gold,
-            fontSize: 13,
-            fontWeight: 900,
-            letterSpacing: 5,
-            fontStyle: "italic",
-            textShadow: "0 1px 2px rgba(0,0,0,0.6)",
-          }}
-        >
-          ★ MUNDIAL MUSICAL 2026 ★
-        </div>
-      </div>
-
-      <div
-        style={{
-          flex: 1,
           background: COLORS.paper,
           margin: "0 16px",
           borderRadius: 8,
@@ -442,28 +419,6 @@ export function CromoFinal({ seleccion }: Props) {
           >
             Un proyecto de @ajpaniagua
           </div>
-        </div>
-      </div>
-
-      <div
-        style={{
-          height: 111,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            color: COLORS.gold,
-            fontSize: 12,
-            fontWeight: 800,
-            letterSpacing: 3,
-            fontStyle: "italic",
-            textShadow: "0 1px 2px rgba(0,0,0,0.6)",
-          }}
-        >
-          #LaSelecciónMusicalDeMiVida
         </div>
       </div>
     </div>
