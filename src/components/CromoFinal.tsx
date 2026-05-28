@@ -393,6 +393,7 @@ export function CromoFinal({ seleccion }: Props) {
                 nombre={a.nombre}
                 foto={a.foto}
                 size="tiny"
+                bgOscuro={false}
               />
             ))}
           </div>

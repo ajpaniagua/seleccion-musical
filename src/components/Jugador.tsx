@@ -16,11 +16,21 @@ type Props = {
   nombre: string;
   foto: string;
   size?: Size;
+  bgOscuro?: boolean;
 };
 
-export function Jugador({ nombre, foto, size = "normal" }: Props) {
+export function Jugador({
+  nombre,
+  foto,
+  size = "normal",
+  bgOscuro = true,
+}: Props) {
   const s = SIZES[size];
   const partido = partirNombre(nombre);
+  const colorTexto = bgOscuro ? COLORS.bg : COLORS.text;
+  const sombraTexto = bgOscuro
+    ? "0 1px 2px rgba(0,0,0,0.9)"
+    : "0 1px 1px rgba(255,255,255,0.6)";
 
   return (
     <div
@@ -69,10 +79,10 @@ export function Jugador({ nombre, foto, size = "normal" }: Props) {
           style={{
             fontSize: s.font,
             fontWeight: 900,
-            color: COLORS.bg,
+            color: colorTexto,
             letterSpacing: 0.2,
             fontStyle: "italic",
-            textShadow: "0 1px 2px rgba(0,0,0,0.9)",
+            textShadow: sombraTexto,
             whiteSpace: "nowrap",
           }}
         >
