@@ -656,6 +656,22 @@ function VistaCromo({
     setMovil(esDispositivoMovil());
   }, []);
 
+  // Mientras la VistaCromo esté montada, pintamos body y html en gris oscuro
+  // para que el "rubber band scroll" de iOS/macOS no enseñe el blanco del
+  // body global por arriba o por abajo del cromo.
+  useEffect(() => {
+    const body = document.body;
+    const html = document.documentElement;
+    const prevBody = body.style.background;
+    const prevHtml = html.style.background;
+    body.style.background = "#1a1a1a";
+    html.style.background = "#1a1a1a";
+    return () => {
+      body.style.background = prevBody;
+      html.style.background = prevHtml;
+    };
+  }, []);
+
   const nombreArchivo = useMemo(() => {
     const slug = (seleccion.usuario || "mi-seleccion")
       .toLowerCase()
