@@ -31,8 +31,9 @@ a {
   text-decoration: none;
 }
 
-/* Evita viudas: nunca dejar una palabra sola en la última línea de un
-   párrafo. Soportado en Chrome 117+, Safari 17.4+, Firefox 121+. */
-p {
+/* Evita viudas en TODO el body: ningún wrap deja una palabra sola colgando
+   al final de un párrafo. Soportado en Chrome 117+, Safari 17.4+, Firefox 121+.
+   Solo afecta cuando el texto envuelve, así que es seguro a nivel global. */
+body {
   text-wrap: pretty;
 }
