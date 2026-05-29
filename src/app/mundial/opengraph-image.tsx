@@ -1,96 +1,151 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "La selección musical de mi vida";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Reproducimos la estética de la landing (`src/app/mundial/page.tsx`) en
+// formato Open Graph 1200×630: fondo crema, "2026" decorativo gigante al
+// fondo en dorado, titular en Bebas Neue con la sombra dorada/negra. Para
+// que Satori (motor de next/og) pueda renderizar Bebas Neue, embebemos el
+// .ttf que vive co-localizado en este directorio.
 export default async function OGImage() {
+  const bebas = await fetch(
+    new URL("./BebasNeue-Regular.ttf", import.meta.url)
+  ).then((r) => r.arrayBuffer());
+
   return new ImageResponse(
     (
       <div
         style={{
           width: "100%",
           height: "100%",
+          background: "#FAFAF7",
+          position: "relative",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background:
-            "radial-gradient(circle at 15% 20%, rgba(212,162,46,0.35) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(212,162,46,0.25) 0%, transparent 50%), #1a1410",
-          color: "#FAFAF7",
-          fontFamily: "Inter, sans-serif",
-          padding: 80,
+          fontFamily: "Bebas Neue",
+          overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            color: "#D4A22E",
-            fontSize: 26,
-            fontWeight: 900,
-            letterSpacing: 10,
-            marginBottom: 32,
-            display: "flex",
-          }}
-        >
-          ★ MUNDIAL MUSICAL 2026 ★
-        </div>
-        <div
-          style={{
-            fontSize: 72,
-            fontWeight: 900,
-            fontStyle: "italic",
-            lineHeight: 0.95,
-            textAlign: "center",
-            letterSpacing: -3,
-            display: "flex",
-          }}
-        >
-          La selección musical
-        </div>
-        <div
-          style={{
-            fontSize: 120,
-            fontWeight: 900,
-            fontStyle: "italic",
-            color: "#D4A22E",
-            lineHeight: 1,
-            marginTop: 8,
-            letterSpacing: -4,
-            display: "flex",
-            textShadow: "5px 5px 0 #0a0a0a",
-          }}
-        >
-          DE MI VIDA
-        </div>
-        <div
-          style={{
-            marginTop: 48,
-            fontSize: 28,
-            color: "rgba(250,250,247,0.8)",
-            fontStyle: "italic",
-            textAlign: "center",
-            maxWidth: 900,
-            display: "flex",
-          }}
-        >
-          Arma tu selección con los artistas que mejor te representan
-        </div>
+        {/* "2026" decorativo gigante: marca de agua dorada al 8% como en la
+            landing. Va anclado arriba a la derecha, fuera del flujo. */}
         <div
           style={{
             position: "absolute",
-            bottom: 50,
+            top: -80,
+            right: -50,
+            fontSize: 460,
             color: "#D4A22E",
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: 2,
+            opacity: 0.09,
+            lineHeight: 0.85,
+            letterSpacing: -10,
             display: "flex",
           }}
         >
-          arturopaniagua.com/mundial · Un proyecto de @ajpaniagua
+          2026
+        </div>
+
+        {/* Bloque central */}
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            padding: "0 60px",
+          }}
+        >
+          <div
+            style={{
+              color: "#D4A22E",
+              fontSize: 28,
+              letterSpacing: 12,
+              marginBottom: 18,
+              display: "flex",
+            }}
+          >
+            ★ MUNDIAL MUSICAL 2026 ★
+          </div>
+
+          <div
+            style={{
+              fontSize: 96,
+              color: "#0a0a0a",
+              lineHeight: 0.85,
+              letterSpacing: -1,
+              display: "flex",
+            }}
+          >
+            LA SELECCIÓN MUSICAL
+          </div>
+          <div
+            style={{
+              fontSize: 210,
+              color: "#D4A22E",
+              lineHeight: 0.9,
+              letterSpacing: -4,
+              marginTop: 8,
+              textShadow: "6px 6px 0 #0a0a0a",
+              display: "flex",
+            }}
+          >
+            DE MI VIDA
+          </div>
+        </div>
+
+        {/* Pie: URL y autoría, alineados con la voz de la landing. */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 38,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <div
+            style={{
+              color: "#0a0a0a",
+              fontSize: 28,
+              letterSpacing: 6,
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+            }}
+          >
+            <span style={{ color: "#D4A22E" }}>★</span>
+            <span>ARTUROPANIAGUA.COM/MUNDIAL</span>
+            <span style={{ color: "#D4A22E" }}>★</span>
+          </div>
+          <div
+            style={{
+              color: "#666",
+              fontSize: 20,
+              letterSpacing: 4,
+              display: "flex",
+            }}
+          >
+            UN PROYECTO DE @AJPANIAGUA
+          </div>
         </div>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Bebas Neue",
+          data: bebas,
+          style: "normal",
+          weight: 400,
+        },
+      ],
+    }
   );
 }
