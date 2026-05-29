@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const alt = "La selección musical de mi vida";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -9,7 +9,8 @@ export const contentType = "image/png";
 // formato Open Graph 1200×630: fondo crema, "2026" decorativo gigante al
 // fondo en dorado, titular en Bebas Neue con la sombra dorada/negra. Para
 // que Satori (motor de next/og) pueda renderizar Bebas Neue, embebemos el
-// .ttf que vive co-localizado en este directorio.
+// .ttf que vive co-localizado en este directorio. Edge runtime es el modo
+// soportado oficialmente por Next para `fetch(new URL(..., import.meta.url))`.
 export default async function OGImage() {
   const bebas = await fetch(
     new URL("./BebasNeue-Regular.ttf", import.meta.url)
