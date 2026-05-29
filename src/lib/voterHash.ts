@@ -5,6 +5,13 @@ const COOKIE_NAME = "ms_vid";
 const COOKIE_TTL = 60 * 60 * 24 * 365; // 1 año
 
 function ipDeHeaders(h: Headers): string {
+  // Cuando el tráfico entra por Cloudflare (caso producción:
+  // arturopaniagua.com → CF Worker → Vercel), la IP del cliente real viene
+  // en `cf-connecting-ip`. Lo intentamos primero. Si no, caemos al estándar
+  // `x-forwarded-for` (Vercel lo rellena en cualquier despliegue directo) y
+  // por último a `x-real-ip`.
+  const cf = h.get("cf-connecting-ip");
+  if (cf) return cf.trim();
   const forwarded = h.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0].trim();
   return h.get("x-real-ip") ?? "0.0.0.0";

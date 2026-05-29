@@ -1,130 +1,213 @@
 # Despliegue de `mi-seleccion`
 
-Esta app vive desplegada en **Vercel** y debe responder bajo
-`https://arturopaniagua.com/mundial`. El dominio raíz `arturopaniagua.com` no
-se toca: sigue siendo la web actual de Arturo. Solo el subpath `/mundial/*`
-apunta a este proyecto.
+La app vive en **Vercel** (URL actual: `https://seleccion-musical.vercel.app`)
+y debe responder, **con la URL exacta**, en
+`https://arturopaniagua.com/mundial`. La web principal `arturopaniagua.com`
+sigue hosteada en **SiteGround** y no se toca.
 
-Este documento es la checklist de despliegue y resolución de incidencias para
-la fase "dominio + privacidad".
+Para conseguir la URL literal sin tocar la web actual, ponemos
+**Cloudflare** (gratis) delante del dominio y usamos un **Worker** que
+intercepta `/mundial*` y se lo pasa internamente a Vercel. Para el resto del
+tráfico, Cloudflare sigue enviando a SiteGround como siempre.
 
----
-
-## 1. Variables de entorno en Vercel
-
-En **Project → Settings → Environment Variables**, replicar las claves de
-`.env.local` para los entornos `Production`, `Preview` y opcionalmente
-`Development`:
-
-| Clave                       | Producción                                  | Notas                                              |
-| --------------------------- | ------------------------------------------- | -------------------------------------------------- |
-| `SUPABASE_URL`              | URL del proyecto Supabase                   | Server-only                                        |
-| `SUPABASE_ANON_KEY`         | Anon key (publishable)                      | Server-only                                        |
-| `SUPABASE_SERVICE_ROLE_KEY` | Service role (¡NO exponer al cliente!)     | Solo usada en Route Handlers del admin             |
-| `ADMIN_PASSWORD`            | Contraseña del dashboard                    | La de `.env.local` rota antes del lanzamiento      |
-| `ADMIN_SECRET`              | Secreto para firmar la cookie de admin      | Rotar antes del lanzamiento                        |
-| `NEXT_PUBLIC_SITE_URL`      | `https://arturopaniagua.com`                | Usado en `metadataBase` (OG, canonical, Twitter)   |
-
-> `NEXT_PUBLIC_SITE_URL` solo es necesario fijarlo en previews si quieres que
-> Open Graph apunte al preview en vez de al dominio definitivo. Por defecto
-> `layout.tsx` ya cae en `https://arturopaniagua.com`.
-
-Tras añadir o cambiar variables, **redeployar** (Vercel no las recoge en
-caliente).
+```
+Usuario
+  │
+  ▼
+arturopaniagua.com (Cloudflare)
+  │
+  ├── /mundial*      ──► Cloudflare Worker ──► seleccion-musical.vercel.app
+  ├── /_next/*       ──► Cloudflare Worker ──► seleccion-musical.vercel.app
+  ├── /api/*         ──► Cloudflare Worker ──► seleccion-musical.vercel.app
+  │
+  └── todo lo demás  ──► SiteGround (web actual de Arturo)
+```
 
 ---
 
-## 2. Apuntar `arturopaniagua.com/mundial` al proyecto Vercel
+## Checklist de la migración
 
-El dominio raíz `arturopaniagua.com` está hosteado en otro sitio (web
-editorial actual de Arturo). La estrategia es **mantener el dominio raíz
-donde está y delegar solo el subpath** `/mundial/*` al proyecto Vercel.
+### 1. Variables de entorno en Vercel
 
-Opciones, de más simple a más invasiva:
+Antes de tocar DNS, asegurarse de que el deploy actual tiene en
+**Vercel → Project → Settings → Environment Variables** (entorno
+`Production`):
 
-### Opción A · Subdominio + redirect (recomendada como atajo)
+| Clave                       | Valor                                       |
+| --------------------------- | ------------------------------------------- |
+| `SUPABASE_URL`              | URL del proyecto Supabase                   |
+| `SUPABASE_ANON_KEY`         | Anon key                                    |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role (server-only)                  |
+| `ADMIN_PASSWORD`            | Contraseña del dashboard                    |
+| `ADMIN_SECRET`              | Secreto para firmar la cookie de admin      |
+| `NEXT_PUBLIC_SITE_URL`      | `https://arturopaniagua.com`                |
 
-1. En Vercel: **Project → Settings → Domains → Add**, añadir
-   `mundial.arturopaniagua.com`.
-2. En el panel DNS de `arturopaniagua.com` (Cloudflare / SiteGround / donde
-   esté): añadir un registro `CNAME` para `mundial` apuntando a
-   `cname.vercel-dns.com`.
-3. En el hosting actual de `arturopaniagua.com`, dejar una redirección 301
-   permanente de `/mundial` y `/mundial/*` hacia `mundial.arturopaniagua.com/*`.
-4. En la app: para que las URLs internas no rompan, *no* cambiar nada (todas
-   las rutas internas siguen siendo `/mundial/...`). El SEO se canoniza solo
-   en el subdominio.
+Tras añadir cualquier variable, **redeploy** desde Vercel.
 
-Pros: cero configuración compleja, despliegue inmediato.
-Contras: la URL "bonita" del briefing (`arturopaniagua.com/mundial`) queda en
-redirect. Para Stories da exactamente igual porque Instagram no muestra la URL
-real.
+### 2. Cloudflare: crear cuenta y añadir el sitio
 
-### Opción B · Reverse proxy del subpath (URL exacta del briefing)
+1. Ir a <https://dash.cloudflare.com/sign-up> y crear cuenta gratis.
+2. **Add a Site** → escribir `arturopaniagua.com` → plan **Free $0**.
+3. Cloudflare escaneará automáticamente los DNS actuales de SiteGround.
+   Verificar que aparecen los registros principales (al menos un `A` apuntando
+   a la IP de SiteGround y los `MX` del correo si hay).
+4. La columna **Proxy status** debe estar:
+   - `A` del dominio raíz: **proxied (naranja)** → para que el Worker pueda
+     interceptar `/mundial*` y servir desde Cloudflare.
+   - `MX` y `TXT` del correo: **DNS only (gris)** → el correo nunca debe pasar
+     por el proxy de Cloudflare.
 
-Mantiene la URL `arturopaniagua.com/mundial` literalmente.
+### 3. SiteGround: cambiar nameservers a Cloudflare
 
-1. En Vercel: añadir `arturopaniagua.com` como dominio del proyecto **sin
-   apuntar DNS**, solo para que Vercel acepte el host.
-2. En el hosting / CDN delante de `arturopaniagua.com` (Cloudflare es lo más
-   sencillo), añadir una regla de **reverse proxy / worker** que reescriba
-   cualquier petición que empiece por `/mundial` hacia
-   `https://<proyecto>.vercel.app/mundial`, preservando path, query y método.
-3. Asegurar que los headers `X-Forwarded-Host` y `X-Forwarded-Proto` se
-   propagan, para que `voterHash` lea la IP cliente correcta desde
-   `x-forwarded-for` (ya lo hace en [`src/lib/voterHash.ts`](../src/lib/voterHash.ts)).
-4. En la app no hace falta `basePath` (todas las rutas ya cuelgan de
-   `/mundial`).
+Cloudflare te muestra al final del wizard sus dos nameservers (por ejemplo
+`dana.ns.cloudflare.com` y `kirk.ns.cloudflare.com`). En SiteGround:
 
-Pros: la URL canónica es exactamente la del briefing.
-Contras: depende de configurar el proxy en Cloudflare/SiteGround sin romper el
-sitio principal. Recomendado solo si Arturo quiere blindar esa URL exacta
-para SEO.
+1. Entrar al panel de SiteGround → **Site Tools** del sitio principal.
+2. **Domain → Name Servers** → elegir **Use Custom Name Servers**.
+3. Pegar los dos nameservers que da Cloudflare.
+4. Guardar y esperar. La propagación tarda entre 15 minutos y 24 horas (lo
+   normal son 1-2h). La web principal **no se cae** mientras propaga: o se
+   resuelve por SiteGround directo (lo viejo) o por Cloudflare (lo nuevo),
+   ambas devuelven la misma web.
 
-> **Sugerencia**: empezar por la Opción A y, si tras el lanzamiento queremos
-> consolidar SEO en la URL exacta, migrar a la B sin tocar la app.
+Cloudflare avisa por email cuando el dominio queda "Active".
+
+### 4. Vercel: añadir `arturopaniagua.com` como dominio del proyecto
+
+**No** es estrictamente necesario que Vercel responda al host
+`arturopaniagua.com` (el Worker hace el fetch a la URL `.vercel.app`), pero
+añadirlo evita problemas con SSL si en el futuro alguien apunta DNS directo.
+
+1. **Vercel → Project → Settings → Domains → Add**.
+2. Añadir `arturopaniagua.com`.
+3. Vercel pedirá un registro de verificación. Como el DNS ya está en
+   Cloudflare, añadir el `TXT` que Vercel pide en
+   **Cloudflare → DNS → Records → Add record** (Type `TXT`, Name lo que diga
+   Vercel, Content el valor que diga Vercel, Proxy `DNS only` gris).
+4. Vercel verificará en minutos. Tras eso, Vercel emite certificado SSL para
+   `arturopaniagua.com`.
+
+### 5. Cloudflare Worker: el proxy a Vercel
+
+En el dashboard de Cloudflare:
+
+1. **Workers & Pages → Create application → Create Worker**.
+2. Nombre sugerido: `mundial-proxy`. Click **Deploy** para crear el Worker
+   con el código por defecto, y luego **Edit code**.
+3. Borrar el código de ejemplo y pegar:
+
+```js
+// Worker mundial-proxy
+// Reenvía /mundial*, /_next/* y /api/* a Vercel preservando todo lo demás
+// para que la web principal de arturopaniagua.com siga sirviéndose desde
+// SiteGround sin tocar nada.
+const ORIGEN = "https://seleccion-musical.vercel.app";
+
+const PREFIJOS_PROXY = ["/mundial", "/_next", "/api"];
+
+export default {
+  async fetch(request) {
+    const urlIn = new URL(request.url);
+    const debeProxy = PREFIJOS_PROXY.some((p) =>
+      urlIn.pathname === p || urlIn.pathname.startsWith(p + "/")
+    );
+
+    if (!debeProxy) {
+      // El resto del tráfico no nos compete: que siga su camino normal a
+      // SiteGround (es lo que hace Cloudflare por defecto).
+      return fetch(request);
+    }
+
+    // Reescribimos la petición hacia el origen de Vercel manteniendo path,
+    // query, método, body y headers. Cambiamos el Host al esperado por
+    // Vercel para que su routing interno (host-based) la enrute.
+    const urlOut = new URL(urlIn.pathname + urlIn.search, ORIGEN);
+    const headers = new Headers(request.headers);
+    headers.set("Host", new URL(ORIGEN).host);
+    // Cloudflare ya rellena cf-connecting-ip con la IP real del cliente.
+    // Lo replicamos en x-forwarded-for por compatibilidad con voterHash.
+    const ipCliente = request.headers.get("cf-connecting-ip");
+    if (ipCliente) headers.set("x-forwarded-for", ipCliente);
+
+    const req = new Request(urlOut, {
+      method: request.method,
+      headers,
+      body: request.body,
+      redirect: "manual",
+    });
+
+    return fetch(req);
+  },
+};
+```
+
+4. **Save and deploy**.
+
+### 6. Cloudflare: enlazar el Worker a las rutas del dominio
+
+En el Worker recién creado:
+
+1. **Settings → Triggers → Routes → Add route**, añadir las **tres** rutas:
+   - `arturopaniagua.com/mundial*` · Zone: `arturopaniagua.com`
+   - `arturopaniagua.com/_next/*` · Zone: `arturopaniagua.com`
+   - `arturopaniagua.com/api/*` · Zone: `arturopaniagua.com`
+
+> Las tres apuntan al mismo Worker. Es necesario incluir `/_next/*` y
+> `/api/*` porque Next.js sirve sus assets y endpoints desde esos paths sin
+> el prefijo `/mundial`. Si la web principal de Arturo no usa `/api/`, no
+> habrá colisión (caso típico en WordPress).
+
+### 7. Verificación
+
+Con todo aplicado:
+
+- [ ] `https://arturopaniagua.com` → muestra la web actual (SiteGround).
+- [ ] `https://arturopaniagua.com/mundial` → muestra la landing del
+      proyecto.
+- [ ] `https://arturopaniagua.com/mundial/crear` → constructor funcional.
+- [ ] `https://arturopaniagua.com/mundial/legal` → aviso legal y privacidad.
+- [ ] Generar un cromo y descargar el PNG funciona desde móvil y escritorio.
+- [ ] `https://arturopaniagua.com/mundial/admin` pide contraseña y luego
+      muestra métricas.
+- [ ] Compartir `https://arturopaniagua.com/mundial` en WhatsApp / X /
+      Telegram pre-visualiza la **Open Graph image** generada por
+      `src/app/mundial/opengraph-image.tsx`.
+- [ ] Probar `curl -I https://arturopaniagua.com/mundial` y comprobar que el
+      header `Server` indica Cloudflare y que devuelve `200`.
+
+### 8. Rotación de credenciales antes del lanzamiento
+
+Antes del 11 de junio:
+
+1. Rotar `ADMIN_PASSWORD` y `ADMIN_SECRET` a valores nuevos y guardarlos en
+   un gestor de contraseñas (no en chats).
+2. Si `SUPABASE_SERVICE_ROLE_KEY` ha pasado por algún chat, rotarla desde
+   **Supabase Dashboard → Project Settings → API**.
+3. Actualizar las variables en Vercel y redeployar.
 
 ---
 
-## 3. Verificación post-despliegue
+## Cosas que **no** hay que hacer
 
-Antes de anunciar:
-
-- [ ] `https://arturopaniagua.com/mundial` (o el subdominio elegido) carga la
-      landing sin errores 404 ni 5xx.
-- [ ] `/mundial/crear` carga, deja construir un cromo y descargar el PNG.
-- [ ] `/mundial/admin` pide contraseña y, tras login, muestra métricas.
-- [ ] `/mundial/legal` carga y enlaza correctamente desde los footers.
-- [ ] Compartir la URL en WhatsApp / X / Telegram muestra la **Open Graph
-      image** (la generada en `src/app/mundial/opengraph-image.tsx`). Probar
-      con el debugger oficial:
-      - <https://developers.facebook.com/tools/debug/>
-      - <https://cards-dev.twitter.com/validator> (si sigue activo)
-- [ ] El bloque "PROYECTO INDEPENDIENTE" del `/mundial/legal` es lo primero
-      que se ve al entrar.
-- [ ] La cookie `ms_vid` se planta al generar el primer cromo y persiste.
+- No cambiar los registros `MX` ni quitarles el modo "DNS only": romperías
+  el correo del dominio.
+- No desactivar el proxy (naranja) del `A` principal: el Worker no se
+  ejecutaría y `arturopaniagua.com/mundial` iría a parar a SiteGround.
+- No subir `SUPABASE_SERVICE_ROLE_KEY` ni `ADMIN_*` como variables
+  `NEXT_PUBLIC_*`: serían visibles desde el navegador.
 
 ---
 
-## 4. Cosas que NO hay que hacer
+## Si algo falla
 
-- **No** añadir el proyecto a la raíz `arturopaniagua.com`: rompe la web
-  actual del autor.
-- **No** exponer `SUPABASE_SERVICE_ROLE_KEY` ni `ADMIN_*` como
-  `NEXT_PUBLIC_*`. Esas claves solo se leen en Route Handlers / Server
-  Components.
-- **No** redirigir desde HTTPS a HTTP en el reverse proxy: rompe la cookie
-  `ms_vid` (sameSite=lax) y las llamadas a Supabase.
-
----
-
-## 5. Rotación de credenciales antes del lanzamiento
-
-Los valores actuales de `.env.local` se generaron en desarrollo. Antes de
-abrir al público el 11 de junio de 2026:
-
-1. Rotar `ADMIN_PASSWORD` y `ADMIN_SECRET` a valores nuevos (256 bits
-   aleatorios) y guardarlos solo en el gestor de contraseñas de Arturo.
-2. Si `SUPABASE_SERVICE_ROLE_KEY` ha sido pegada en algún chat, rotarla desde
-   Supabase Dashboard → Project Settings → API.
-3. Actualizar todas las variables en Vercel y redeployar.
+- **`arturopaniagua.com/mundial` devuelve 404 con `Server: Apache`**: el
+  Worker no se está disparando. Comprobar las **Routes** en el Worker
+  (Settings → Triggers).
+- **Devuelve 521 / 522**: Cloudflare no puede contactar al origen. Revisar
+  que la URL en el Worker (`ORIGEN`) es la correcta y que el deploy de
+  Vercel sigue activo.
+- **Devuelve 526 (SSL invalid)**: muy raro, pero si pasara, en
+  **Cloudflare → SSL/TLS → Overview** poner el modo en **Full (strict)**.
+- **Las imágenes de Deezer / iTunes no cargan**: el proxy de fotos
+  (`/api/foto`) está cubierto por la route `/api/*`. Si fallara, mirar
+  logs del Worker en Cloudflare.
