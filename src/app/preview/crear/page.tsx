@@ -265,12 +265,12 @@ export default function CrearPage() {
         </h1>
         <p
           style={{
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
-            color: "#555",
-            marginTop: 10,
-            fontSize: 15,
-            lineHeight: 1.4,
+            fontFamily: FUENTES.UI,
+            color: "#333",
+            marginTop: 14,
+            fontSize: "clamp(15px, 2vw, 17px)",
+            lineHeight: 1.45,
+            fontWeight: 500,
             maxWidth: 560,
             marginLeft: "auto",
             marginRight: "auto",
@@ -346,10 +346,10 @@ export default function CrearPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span
                 style={{
-                  fontFamily: FUENTES.EDITORIAL,
-                  fontStyle: "italic",
+                  fontFamily: FUENTES.UI,
                   opacity: 0.7,
                   fontSize: 16,
+                  fontWeight: 500,
                 }}
               >
                 Elige una canción…
@@ -386,10 +386,10 @@ export default function CrearPage() {
       <Seccion titulo="ONCE INICIAL · 4-3-3" subtitulo={COPYS.once.subtitulo}>
         <p
           style={{
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
+            fontFamily: FUENTES.UI,
             color: "#888",
             fontSize: 12,
+            fontWeight: 500,
             marginTop: -8,
             marginBottom: 12,
             textAlign: "center",
@@ -566,10 +566,10 @@ function BarraProgreso({
           {rellenosBanquillo > 0 && (
             <div
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: "#888",
-                fontFamily: FUENTES.EDITORIAL,
-                fontStyle: "italic",
+                fontFamily: FUENTES.UI,
+                fontWeight: 500,
               }}
             >
               + {rellenosBanquillo} en el banquillo
@@ -641,13 +641,13 @@ function Seccion({
       </div>
       <p
         style={{
-          fontFamily: FUENTES.EDITORIAL,
-          fontStyle: "italic",
-          color: "#555",
-          fontSize: 14,
-          lineHeight: 1.4,
+          fontFamily: FUENTES.UI,
+          color: "#333",
+          fontSize: 15,
+          fontWeight: 500,
+          lineHeight: 1.45,
           marginTop: 0,
-          marginBottom: 10,
+          marginBottom: 12,
         }}
       >
         {subtitulo}
@@ -893,9 +893,9 @@ function VistaCromo({
         <p
           style={{
             color: COLORS.gold,
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
+            fontFamily: FUENTES.UI,
             fontSize: 14,
+            fontWeight: 500,
             maxWidth: 360,
             textAlign: "center",
             margin: 0,
@@ -906,10 +906,10 @@ function VistaCromo({
       )}
       <p
         style={{
-          color: "rgba(255,255,255,0.6)",
-          fontFamily: "Georgia, serif",
-          fontStyle: "italic",
+          color: "rgba(255,255,255,0.7)",
+          fontFamily: FUENTES.UI,
           fontSize: 13,
+          fontWeight: 500,
           maxWidth: 360,
           textAlign: "center",
         }}
@@ -944,10 +944,10 @@ function VistaCromo({
           </div>
           <p
             style={{
-              fontFamily: "Georgia, serif",
-              fontStyle: "italic",
+              fontFamily: FUENTES.UI,
               color: COLORS.bg,
               fontSize: 14,
+              fontWeight: 500,
               lineHeight: 1.5,
               margin: 0,
             }}
