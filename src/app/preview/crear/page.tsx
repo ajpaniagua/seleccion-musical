@@ -297,22 +297,23 @@ export default function CrearPage() {
             width: "100%",
             background: COLORS.text,
             color: COLORS.bg,
-            border: "none",
+            border: `2px solid ${COLORS.text}`,
             padding: 16,
-            borderRadius: 10,
+            borderRadius: 0,
             textAlign: "left",
-            boxShadow: `4px 4px 0 ${COLORS.gold}`,
+            boxShadow: `5px 5px 0 ${COLORS.gold}`,
           }}
         >
           {seleccion.himno ? (
             <div>
               <div
                 style={{
-                  fontSize: 10,
-                  letterSpacing: 2,
+                  fontFamily: FUENTES.POSTER,
+                  fontSize: 16,
+                  letterSpacing: 3,
                   color: COLORS.gold,
-                  fontWeight: 900,
-                  marginBottom: 4,
+                  fontWeight: 400,
+                  marginBottom: 6,
                 }}
               >
                 ★ HIMNO ELEGIDO
@@ -324,20 +325,36 @@ export default function CrearPage() {
                   fontStyle: "italic",
                   color: COLORS.gold,
                   letterSpacing: -0.5,
+                  fontFamily: FUENTES.UI,
                 }}
               >
                 &ldquo;{seleccion.himno.titulo}&rdquo;
               </div>
-              <div style={{ fontSize: 13, fontWeight: 700, marginTop: 4 }}>
+              <div
+                style={{
+                  fontFamily: FUENTES.POSTER,
+                  fontSize: 16,
+                  fontWeight: 400,
+                  letterSpacing: 2,
+                  marginTop: 4,
+                }}
+              >
                 {seleccion.himno.artista.toUpperCase()}
               </div>
             </div>
           ) : (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontStyle: "italic", opacity: 0.7 }}>
+              <span
+                style={{
+                  fontFamily: FUENTES.EDITORIAL,
+                  fontStyle: "italic",
+                  opacity: 0.7,
+                  fontSize: 16,
+                }}
+              >
                 Elige una canción…
               </span>
-              <span style={{ color: COLORS.gold, fontSize: 22, fontWeight: 900 }}>+</span>
+              <span style={{ color: COLORS.gold, fontSize: 26, fontWeight: 900 }}>+</span>
             </div>
           )}
         </button>
@@ -537,8 +554,9 @@ function BarraProgreso({
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <div
             style={{
-              fontSize: 11,
-              fontWeight: 900,
+              fontFamily: FUENTES.POSTER,
+              fontSize: 22,
+              fontWeight: 400,
               letterSpacing: 3,
               color: COLORS.text,
             }}
@@ -550,7 +568,7 @@ function BarraProgreso({
               style={{
                 fontSize: 11,
                 color: "#888",
-                fontFamily: "Georgia, serif",
+                fontFamily: FUENTES.EDITORIAL,
                 fontStyle: "italic",
               }}
             >
@@ -564,13 +582,14 @@ function BarraProgreso({
             onClick={onReset}
             style={{
               background: "transparent",
-              color: "#888",
-              border: "1px solid #ccc",
-              padding: "6px 12px",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              borderRadius: 999,
+              color: "#666",
+              border: "2px solid #999",
+              padding: "6px 14px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 14,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
             }}
           >
             EMPEZAR DE CERO
