@@ -274,6 +274,7 @@ export default function CrearPage() {
             maxWidth: 560,
             marginLeft: "auto",
             marginRight: "auto",
+            textWrap: "balance",
           }}
         >
           {TEXTOS.constructorIntro}
@@ -648,6 +649,7 @@ function Seccion({
           lineHeight: 1.45,
           marginTop: 0,
           marginBottom: 12,
+          textWrap: "balance",
         }}
       >
         {subtitulo}
