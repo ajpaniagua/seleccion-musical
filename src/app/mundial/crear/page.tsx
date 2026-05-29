@@ -787,10 +787,17 @@ function VistaCromo({
     >
       <div
         style={{
-          // Reserva el espacio escalado en el layout
+          // Wrapper exterior: fondo + gradiente + sombra. NO se captura.
+          // El cromoRef (interior) es transparente para que el lienzo del PNG
+          // pueda poner SU gradiente único y se vea por toda la imagen sin
+          // chocar con el del cromo.
           width: 480 * escala,
           height: alturaCromo * escala,
           flexShrink: 0,
+          background: "#1a1410",
+          backgroundImage:
+            "radial-gradient(circle at 10% 10%, rgba(212,162,46,0.28) 0%, transparent 45%), radial-gradient(circle at 90% 90%, rgba(212,162,46,0.20) 0%, transparent 45%)",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
         }}
       >
         <div
@@ -799,14 +806,7 @@ function VistaCromo({
             width: 480,
             transformOrigin: "top left",
             transform: `scale(${escala})`,
-            // Fondo + gradiente dorado del cromo. Se aplica aquí (no en
-            // CromoFinal) para que html2canvas capture el cromo con fondo
-            // transparente — el lienzo final del PNG pone su propio gradiente
-            // continuo en toda la imagen 9:16.
-            background: "#1a1410",
-            backgroundImage:
-              "radial-gradient(circle at 10% 10%, rgba(212,162,46,0.28) 0%, transparent 45%), radial-gradient(circle at 90% 90%, rgba(212,162,46,0.20) 0%, transparent 45%)",
-            boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
+            background: "transparent",
           }}
         >
           <CromoFinal seleccion={seleccion} />
