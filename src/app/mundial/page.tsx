@@ -81,14 +81,14 @@ export default function MundialPage() {
           fontSize: 18,
           color: "#444",
           maxWidth: 560,
-          marginTop: 24,
-          lineHeight: 1.5,
+          marginTop: 16,
+          lineHeight: 1.4,
         }}
       >
         {TEXTOS.landingIntro}
       </p>
 
-      <div style={{ marginTop: 32 }}>
+      <div style={{ marginTop: 22 }}>
         <CromoDemo />
       </div>
       <div
@@ -97,7 +97,7 @@ export default function MundialPage() {
           fontStyle: "italic",
           fontSize: 13,
           color: "#888",
-          marginTop: 10,
+          marginTop: 8,
         }}
       >
         {TEXTOS.landingDemoNota}
@@ -107,7 +107,7 @@ export default function MundialPage() {
         href="/mundial/crear"
         style={{
           display: "inline-block",
-          marginTop: 36,
+          marginTop: 24,
           background: COLORS.text,
           color: COLORS.bg,
           padding: "20px 48px",

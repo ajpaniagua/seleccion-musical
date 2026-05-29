@@ -216,7 +216,7 @@ export default function CrearPage() {
         padding: "32px 16px 80px",
       }}
     >
-      <header style={{ textAlign: "center", marginBottom: 32 }}>
+      <header style={{ textAlign: "center", marginBottom: 22 }}>
         <div
           style={{
             color: COLORS.gold,
@@ -247,9 +247,9 @@ export default function CrearPage() {
             fontFamily: "Georgia, serif",
             fontStyle: "italic",
             color: "#555",
-            marginTop: 12,
+            marginTop: 10,
             fontSize: 15,
-            lineHeight: 1.5,
+            lineHeight: 1.4,
             maxWidth: 560,
             marginLeft: "auto",
             marginRight: "auto",
@@ -586,7 +586,7 @@ function Seccion({
   children: React.ReactNode;
 }) {
   return (
-    <section style={{ marginBottom: 32 }}>
+    <section style={{ marginBottom: 22 }}>
       <div
         style={{
           fontSize: 11,
@@ -604,9 +604,9 @@ function Seccion({
           fontStyle: "italic",
           color: "#555",
           fontSize: 14,
-          lineHeight: 1.5,
+          lineHeight: 1.4,
           marginTop: 0,
-          marginBottom: 14,
+          marginBottom: 10,
         }}
       >
         {subtitulo}
