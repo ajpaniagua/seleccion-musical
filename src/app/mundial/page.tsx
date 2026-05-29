@@ -44,51 +44,30 @@ export default function MundialPage() {
           fontSize: 13,
           fontWeight: 900,
           letterSpacing: 5,
-          marginBottom: 16,
+          marginBottom: 22,
         }}
       >
         ★ MUNDIAL MUSICAL 2026 ★
       </div>
 
-      <h1
-        style={{
-          margin: 0,
-          fontSize: "clamp(40px, 8vw, 72px)",
-          fontWeight: 900,
-          fontStyle: "italic",
-          letterSpacing: -2,
-          lineHeight: 0.95,
-          maxWidth: 800,
-        }}
-      >
-        La selección musical
-        <br />
-        <span
-          style={{
-            color: COLORS.gold,
-            fontSize: "clamp(48px, 10vw, 96px)",
-            textShadow: `4px 4px 0 ${COLORS.text}`,
-          }}
-        >
-          DE MI VIDA
-        </span>
-      </h1>
-
+      {/* El título grande "La selección musical DE MI VIDA" ya vive dentro
+          del propio cromo demo, así que aquí lo dejamos solo como intro
+          editorial para evitar redundancia. */}
       <p
         style={{
           fontFamily: "Georgia, serif",
           fontStyle: "italic",
-          fontSize: 18,
-          color: "#444",
-          maxWidth: 560,
-          marginTop: 16,
+          fontSize: 20,
+          color: "#333",
+          maxWidth: 520,
+          margin: 0,
           lineHeight: 1.4,
         }}
       >
         {TEXTOS.landingIntro}
       </p>
 
-      <div style={{ marginTop: 22 }}>
+      <div style={{ marginTop: 28 }}>
         <CromoDemo />
       </div>
       <div
@@ -97,7 +76,7 @@ export default function MundialPage() {
           fontStyle: "italic",
           fontSize: 13,
           color: "#888",
-          marginTop: 8,
+          marginTop: 10,
         }}
       >
         {TEXTOS.landingDemoNota}

@@ -1,7 +1,11 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { Seleccion } from "@/lib/tipos";
 import { CromoFinal } from "./CromoFinal";
+
+const ESCALA = 0.42;
+const ANCHO_BASE = 480;
 
 // Fotos reales de Deezer cacheadas a través de nuestro proxy /api/foto.
 // Hardcoded para no tener que pegarle a la API en cada visita a la landing.
@@ -96,11 +100,26 @@ const SELECCION_DEMO: Seleccion = {
  * de Deezer servidas a través del proxy /api/foto.
  */
 export function CromoDemo() {
+  // Medimos la altura real del cromo (varía si se cambia el contenido o
+  // las dimensiones de CromoFinal) para que el wrapper escalado reserve
+  // exactamente el espacio justo.
+  const cromoRef = useRef<HTMLDivElement>(null);
+  const [alto, setAlto] = useState(720);
+  useEffect(() => {
+    if (!cromoRef.current) return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h && h > 0) setAlto(h);
+    });
+    ro.observe(cromoRef.current);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <div
       style={{
-        width: 240,
-        height: 320,
+        width: ANCHO_BASE * ESCALA,
+        height: alto * ESCALA,
         flexShrink: 0,
         background: "#1a1410",
         backgroundImage:
@@ -111,10 +130,11 @@ export function CromoDemo() {
       }}
     >
       <div
+        ref={cromoRef}
         style={{
-          width: 480,
+          width: ANCHO_BASE,
           transformOrigin: "top left",
-          transform: "scale(0.5)",
+          transform: `scale(${ESCALA})`,
           background: "transparent",
         }}
       >
