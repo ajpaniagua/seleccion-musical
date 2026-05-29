@@ -90,9 +90,12 @@ export default function PreviewPage() {
             <span
               style={{
                 display: "block",
-                // min más bajo para que en iPhone (375px) "LA SELECCIÓN MUSICAL"
-                // siga cabiendo en una sola línea sin desbordar lateralmente.
-                fontSize: "clamp(28px, 8vw, 96px)",
+                // Tamaños calculados para que el título llene el ancho de la
+                // pantalla en MÓVIL sin desbordarse y mantenga su pinta de
+                // póster en desktop. "LA SELECCIÓN MUSICAL" ≈ 19 chars en
+                // Bebas Neue (cada char ~0.42 × fontSize de ancho), así que
+                // a 40px ocupa ~320px (cabe holgado en iPhone 375).
+                fontSize: "clamp(40px, 11vw, 96px)",
                 color: COLORS.text,
                 whiteSpace: "nowrap",
               }}
@@ -102,7 +105,9 @@ export default function PreviewPage() {
             <span
               style={{
                 display: "block",
-                fontSize: "clamp(52px, 16vw, 200px)",
+                // "DE MI VIDA" ≈ 10 chars: a 72px ocupa ~302px → cabe en
+                // iPhone con presencia de cartel.
+                fontSize: "clamp(72px, 22vw, 200px)",
                 color: COLORS.gold,
                 textShadow: `5px 5px 0 ${COLORS.text}`,
                 whiteSpace: "nowrap",
@@ -118,7 +123,7 @@ export default function PreviewPage() {
         <p
           style={{
             margin: "26px 0 0",
-            maxWidth: 460,
+            maxWidth: 720,
             fontFamily: "'Inter', sans-serif",
             fontSize: "clamp(15px, 2vw, 18px)",
             color: "#333",
@@ -127,22 +132,22 @@ export default function PreviewPage() {
           }}
         >
           Tu once de música contra el mundo. Himno, seleccionador, titulares y
-          banquillo de lujo. <strong>Solo te llevará 5 minutos.</strong>
+          banquillo de lujo.
+          {/* Forzamos line break para que "Solo te llevará 5 minutos." NUNCA
+              se parta entre dos líneas y siempre sea su propia frase visual. */}
+          <br />
+          <strong style={{ whiteSpace: "nowrap" }}>
+            Solo te llevará 5 minutos.
+          </strong>
         </p>
 
-        {/* Cromo como héroe central. Usamos el prop `escala` del componente
-            (que envuelve internamente con transform + ResizeObserver) en lugar
-            de aplicar el scale por fuera: así el layout reserva el espacio
-            correcto y no se solapa con el CTA. */}
-        <div style={{ marginTop: 32 }}>
-          <CromoDemo escala={1.2} />
-        </div>
-
+        {/* CTA arriba del cromo: lo importante es que el visitante pueda
+            empezar SIN tener que scrollear hasta el final en móvil. */}
         <Link
           href="/mundial/crear"
           style={{
             display: "inline-block",
-            marginTop: 40,
+            marginTop: 28,
             background: COLORS.text,
             color: COLORS.bg,
             padding: "20px 52px",
@@ -157,6 +162,13 @@ export default function PreviewPage() {
         >
           ARMA TU SELECCIÓN →
         </Link>
+
+        {/* Cromo como referencia visual debajo, para que el visitante vea qué
+            va a obtener si ya le ha llamado la atención lo suficiente como
+            para no pulsar el CTA todavía. */}
+        <div style={{ marginTop: 40 }}>
+          <CromoDemo escala={1.2} />
+        </div>
 
         <footer
           style={{
