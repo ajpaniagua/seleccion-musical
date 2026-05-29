@@ -52,6 +52,18 @@ export function CromoFinal({ seleccion }: Props) {
         }}
       >
         <div style={{ padding: "14px 16px 8px", textAlign: "center" }}>
+          <div
+            style={{
+              color: COLORS.gold,
+              fontSize: 11,
+              fontWeight: 900,
+              letterSpacing: 4,
+              fontStyle: "italic",
+              marginBottom: 6,
+            }}
+          >
+            ★ MUNDIAL MUSICAL 2026 ★
+          </div>
           <h1
             style={{
               fontSize: 24,
