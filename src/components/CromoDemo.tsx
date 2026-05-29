@@ -3,49 +3,102 @@
 import type { Seleccion } from "@/lib/tipos";
 import { CromoFinal } from "./CromoFinal";
 
-// Selección de muestra para la landing. Sin fotos: se ven las iniciales
-// en los círculos, lo cual basta para que se entienda el formato del cromo
-// y evita depender de CDNs externos al cargar la home.
+// Fotos reales de Deezer cacheadas a través de nuestro proxy /api/foto.
+// Hardcoded para no tener que pegarle a la API en cada visita a la landing.
+const D = (hash: string) =>
+  `https://cdn-images.dzcdn.net/images/artist/${hash}/1000x1000-000000-80-0-0.jpg`;
+
 const SELECCION_DEMO: Seleccion = {
   usuario: "tu_nombre",
   himno: { id: "demo-1", titulo: "Mediterráneo", artista: "Joan Manuel Serrat" },
-  seleccionador: { id: "demo-s", nombre: "Bunbury", foto: "" },
-  portero: { id: "demo-p", nombre: "Camarón de la Isla", foto: "" },
+  seleccionador: {
+    id: "demo-s",
+    nombre: "Bunbury",
+    foto: D("08b73c9b2f63b5e269efda3b1f762007"),
+  },
+  portero: {
+    id: "demo-p",
+    nombre: "Camarón de la Isla",
+    foto: D("877069deb0f62bdd7584d268c863bd76"),
+  },
   defensas: [
-    { id: "d1", nombre: "Mecano", foto: "" },
-    { id: "d2", nombre: "Héroes del Silencio", foto: "" },
-    { id: "d3", nombre: "Los Planetas", foto: "" },
-    { id: "d4", nombre: "Extremoduro", foto: "" },
+    { id: "d1", nombre: "Mecano", foto: D("a7335b62b37653e04be8a9ad32c7b7bd") },
+    {
+      id: "d2",
+      nombre: "Héroes del Silencio",
+      foto: D("8df7881250c96ec27bbf6dc92c89d393"),
+    },
+    {
+      id: "d3",
+      nombre: "Los Planetas",
+      foto: D("17f8104eb19fc6c0d3049791b2a19f66"),
+    },
+    {
+      id: "d4",
+      nombre: "Extremoduro",
+      foto: D("fac337de59e1a5ae1100c53f2685a53f"),
+    },
   ],
   medios: [
-    { id: "m1", nombre: "Antonio Vega", foto: "" },
-    { id: "m2", nombre: "Radio Futura", foto: "" },
-    { id: "m3", nombre: "Zahara", foto: "" },
+    {
+      id: "m1",
+      nombre: "Antonio Vega",
+      foto: D("1498030d1f8288d0fc2c8ef25bb90339"),
+    },
+    {
+      id: "m2",
+      nombre: "Radio Futura",
+      foto: D("9ba13a68bdbfa282a6d0b6fa3c4ba0d8"),
+    },
+    { id: "m3", nombre: "Zahara", foto: D("04950881d6aa5deaed2ad09396fd1bb2") },
   ],
   delanteros: [
-    { id: "f1", nombre: "Rosalía", foto: "" },
-    { id: "f2", nombre: "Paco de Lucía", foto: "" },
-    { id: "f3", nombre: "C. Tangana", foto: "" },
+    {
+      id: "f1",
+      nombre: "Rosalía",
+      foto: D("96636156440182f1e7db3f77d39e6545"),
+    },
+    {
+      id: "f2",
+      nombre: "Paco de Lucía",
+      foto: D("a39ed1db816ffe65ce47a3ed67831dca"),
+    },
+    {
+      id: "f3",
+      nombre: "C. Tangana",
+      foto: D("0e48ef0b911fe883e0eaa67350c85c46"),
+    },
   ],
   banquillo: [
-    { id: "s1", nombre: "Amaia", foto: "" },
-    { id: "s2", nombre: "Luz Casal", foto: "" },
-    { id: "s3", nombre: "Leiva", foto: "" },
-    { id: "s4", nombre: "Vetusta Morla", foto: "" },
-    { id: "s5", nombre: "Kiko Veneno", foto: "" },
+    { id: "s1", nombre: "Amaia", foto: D("94692c20cfdae68537e615b3312f2146") },
+    {
+      id: "s2",
+      nombre: "Luz Casal",
+      foto: D("d6f2e5a62ed668f843060d3ceda9d57d"),
+    },
+    { id: "s3", nombre: "Leiva", foto: D("d466308ffa855c5321e75385f3a07bb4") },
+    {
+      id: "s4",
+      nombre: "Vetusta Morla",
+      foto: D("8682e037612a642d79e06584cb4e1e29"),
+    },
+    {
+      id: "s5",
+      nombre: "Kiko Veneno",
+      foto: D("76f5a7ac02d84e5b5e9c7466bc9290fe"),
+    },
   ],
 };
 
 /**
- * Miniatura no interactiva del cromo para la landing. Sirve para que el
- * usuario vea de qué va antes de invertir 5 minutos creando el suyo.
+ * Miniatura del cromo para la landing: cromo real escalado a la mitad,
+ * con fondo + gradiente igual que en la vista de compartir, y fotos reales
+ * de Deezer servidas a través del proxy /api/foto.
  */
 export function CromoDemo() {
   return (
     <div
       style={{
-        // Wrapper con fondo + gradiente igual que en la vista de compartir,
-        // para que el cromo se vea "completo" (transparente por dentro).
         width: 240,
         height: 320,
         flexShrink: 0,
