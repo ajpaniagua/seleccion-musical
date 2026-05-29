@@ -25,17 +25,15 @@ export function CromoFinal({ seleccion }: Props) {
     <div
       style={{
         width: 480,
-        background: "#1a1410",
+        // El fondo (color + gradiente dorado) lo aplica el contenedor exterior
+        // — en la previa, la VistaCromo; en el PNG final, el lienzo 1080×1920.
+        // Así el gradiente es uno solo y continúa por toda la imagen sin cortes.
+        background: "transparent",
         position: "relative",
-        boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         padding: "20px 0",
-        backgroundImage: `
-          radial-gradient(circle at 10% 10%, rgba(212,162,46,0.28) 0%, transparent 45%),
-          radial-gradient(circle at 90% 90%, rgba(212,162,46,0.20) 0%, transparent 45%)
-        `,
         fontFamily: "'Inter', sans-serif",
       }}
     >

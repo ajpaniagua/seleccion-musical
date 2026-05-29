@@ -20,11 +20,13 @@ export async function generarPngCromo(nodo: HTMLElement): Promise<Blob> {
     } catch {}
   }
 
-  // Capturamos el cromo a 2.25× (480px de ancho → 1080px en el PNG)
+  // Capturamos el cromo a 2.25× con fondo transparente. El lienzo final
+  // pone el color base y el gradiente, así toda la imagen 9:16 luce el
+  // mismo gradiente sin cortes en la frontera del cromo.
   const cromoCanvas = await html2canvas(nodo, {
     useCORS: true,
     allowTaint: false,
-    backgroundColor: FONDO_FINAL,
+    backgroundColor: null,
     scale: 2.25,
     logging: false,
     imageTimeout: 12000,

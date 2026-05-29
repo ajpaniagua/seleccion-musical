@@ -799,6 +799,14 @@ function VistaCromo({
             width: 480,
             transformOrigin: "top left",
             transform: `scale(${escala})`,
+            // Fondo + gradiente dorado del cromo. Se aplica aquí (no en
+            // CromoFinal) para que html2canvas capture el cromo con fondo
+            // transparente — el lienzo final del PNG pone su propio gradiente
+            // continuo en toda la imagen 9:16.
+            background: "#1a1410",
+            backgroundImage:
+              "radial-gradient(circle at 10% 10%, rgba(212,162,46,0.28) 0%, transparent 45%), radial-gradient(circle at 90% 90%, rgba(212,162,46,0.20) 0%, transparent 45%)",
+            boxShadow: "0 30px 80px rgba(0,0,0,0.6)",
           }}
         >
           <CromoFinal seleccion={seleccion} />
