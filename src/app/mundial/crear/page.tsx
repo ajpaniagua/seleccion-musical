@@ -17,6 +17,7 @@ import { SlotJugador } from "@/components/SlotJugador";
 import { guardarSeleccion } from "@/lib/api";
 import { COLORS } from "@/lib/colores";
 import { COPYS, TEXTOS } from "@/lib/copys";
+import { FUENTES } from "@/lib/tipografias";
 import {
   compartirArchivo,
   descargarBlob,
@@ -223,7 +224,8 @@ export default function CrearPage() {
             fontSize: 11,
             fontWeight: 900,
             letterSpacing: 4,
-            marginBottom: 8,
+            marginBottom: 10,
+            fontFamily: FUENTES.UI,
           }}
         >
           ★ MUNDIAL MUSICAL 2026 ★
@@ -231,28 +233,31 @@ export default function CrearPage() {
         <h1
           style={{
             margin: 0,
-            fontWeight: 900,
-            fontStyle: "italic",
-            letterSpacing: -1.5,
-            lineHeight: 1,
+            fontFamily: FUENTES.POSTER,
+            fontWeight: 400,
+            lineHeight: 0.85,
+            letterSpacing: -1,
           }}
         >
           <span
             style={{
               display: "block",
-              fontSize: "clamp(22px, 5vw, 38px)",
+              fontSize: "clamp(34px, 7.6vw, 60px)",
               whiteSpace: "nowrap",
+              color: COLORS.text,
             }}
           >
-            La selección musical
+            LA SELECCIÓN MUSICAL
           </span>
           <span
             style={{
               display: "block",
               color: COLORS.gold,
-              fontSize: "clamp(34px, 9vw, 68px)",
+              fontSize: "clamp(56px, 14vw, 130px)",
               whiteSpace: "nowrap",
-              marginTop: 2,
+              marginTop: 4,
+              letterSpacing: -2,
+              textShadow: `4px 4px 0 ${COLORS.text}`,
             }}
           >
             DE MI VIDA
@@ -260,15 +265,16 @@ export default function CrearPage() {
         </h1>
         <p
           style={{
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
-            color: "#555",
-            marginTop: 10,
-            fontSize: 15,
-            lineHeight: 1.4,
+            fontFamily: FUENTES.UI,
+            color: "#333",
+            marginTop: 14,
+            fontSize: "clamp(15px, 2vw, 17px)",
+            lineHeight: 1.45,
+            fontWeight: 500,
             maxWidth: 560,
             marginLeft: "auto",
             marginRight: "auto",
+            textWrap: "balance",
           }}
         >
           {TEXTOS.constructorIntro}
@@ -292,22 +298,23 @@ export default function CrearPage() {
             width: "100%",
             background: COLORS.text,
             color: COLORS.bg,
-            border: "none",
+            border: `2px solid ${COLORS.text}`,
             padding: 16,
-            borderRadius: 10,
+            borderRadius: 0,
             textAlign: "left",
-            boxShadow: `4px 4px 0 ${COLORS.gold}`,
+            boxShadow: `5px 5px 0 ${COLORS.gold}`,
           }}
         >
           {seleccion.himno ? (
             <div>
               <div
                 style={{
-                  fontSize: 10,
-                  letterSpacing: 2,
+                  fontFamily: FUENTES.POSTER,
+                  fontSize: 16,
+                  letterSpacing: 3,
                   color: COLORS.gold,
-                  fontWeight: 900,
-                  marginBottom: 4,
+                  fontWeight: 400,
+                  marginBottom: 6,
                 }}
               >
                 ★ HIMNO ELEGIDO
@@ -319,20 +326,36 @@ export default function CrearPage() {
                   fontStyle: "italic",
                   color: COLORS.gold,
                   letterSpacing: -0.5,
+                  fontFamily: FUENTES.UI,
                 }}
               >
                 &ldquo;{seleccion.himno.titulo}&rdquo;
               </div>
-              <div style={{ fontSize: 13, fontWeight: 700, marginTop: 4 }}>
+              <div
+                style={{
+                  fontFamily: FUENTES.POSTER,
+                  fontSize: 16,
+                  fontWeight: 400,
+                  letterSpacing: 2,
+                  marginTop: 4,
+                }}
+              >
                 {seleccion.himno.artista.toUpperCase()}
               </div>
             </div>
           ) : (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontStyle: "italic", opacity: 0.7 }}>
+              <span
+                style={{
+                  fontFamily: FUENTES.UI,
+                  opacity: 0.7,
+                  fontSize: 16,
+                  fontWeight: 500,
+                }}
+              >
                 Elige una canción…
               </span>
-              <span style={{ color: COLORS.gold, fontSize: 22, fontWeight: 900 }}>+</span>
+              <span style={{ color: COLORS.gold, fontSize: 26, fontWeight: 900 }}>+</span>
             </div>
           )}
         </button>
@@ -364,12 +387,12 @@ export default function CrearPage() {
       <Seccion titulo="ONCE INICIAL · 4-3-3" subtitulo={COPYS.once.subtitulo}>
         <p
           style={{
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
+            fontFamily: FUENTES.UI,
             color: "#888",
             fontSize: 12,
-            marginTop: -8,
-            marginBottom: 12,
+            fontWeight: 500,
+            marginTop: 4,
+            marginBottom: 14,
             textAlign: "center",
           }}
         >
@@ -437,13 +460,14 @@ export default function CrearPage() {
           style={{
             background: valida ? COLORS.text : "#888",
             color: COLORS.bg,
-            border: "none",
-            padding: "18px 36px",
-            fontSize: 16,
-            fontWeight: 900,
-            letterSpacing: 2,
-            borderRadius: 999,
-            boxShadow: valida ? `4px 4px 0 ${COLORS.gold}` : "none",
+            border: valida ? `2px solid ${COLORS.text}` : "none",
+            padding: "18px 44px",
+            fontFamily: FUENTES.POSTER,
+            fontSize: 26,
+            fontWeight: 400,
+            letterSpacing: 3,
+            borderRadius: 0,
+            boxShadow: valida ? `5px 5px 0 ${COLORS.gold}` : "none",
             cursor: valida ? "pointer" : "not-allowed",
           }}
         >
@@ -531,8 +555,9 @@ function BarraProgreso({
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <div
             style={{
-              fontSize: 11,
-              fontWeight: 900,
+              fontFamily: FUENTES.POSTER,
+              fontSize: 22,
+              fontWeight: 400,
               letterSpacing: 3,
               color: COLORS.text,
             }}
@@ -542,10 +567,10 @@ function BarraProgreso({
           {rellenosBanquillo > 0 && (
             <div
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: "#888",
-                fontFamily: "Georgia, serif",
-                fontStyle: "italic",
+                fontFamily: FUENTES.UI,
+                fontWeight: 500,
               }}
             >
               + {rellenosBanquillo} en el banquillo
@@ -558,13 +583,14 @@ function BarraProgreso({
             onClick={onReset}
             style={{
               background: "transparent",
-              color: "#888",
-              border: "1px solid #ccc",
-              padding: "6px 12px",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              borderRadius: 999,
+              color: "#666",
+              border: "2px solid #999",
+              padding: "6px 14px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 14,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
             }}
           >
             EMPEZAR DE CERO
@@ -605,24 +631,25 @@ function Seccion({
     <section style={{ marginBottom: 22 }}>
       <div
         style={{
-          fontSize: 11,
-          letterSpacing: 3,
-          fontWeight: 900,
+          fontFamily: FUENTES.POSTER,
+          fontSize: 22,
+          letterSpacing: 4,
           color: COLORS.text,
           marginBottom: 4,
         }}
       >
-        ★ {titulo}
+        ★ {titulo.toUpperCase()}
       </div>
       <p
         style={{
-          fontFamily: "Georgia, serif",
-          fontStyle: "italic",
-          color: "#555",
-          fontSize: 14,
-          lineHeight: 1.4,
+          fontFamily: FUENTES.UI,
+          color: "#333",
+          fontSize: 15,
+          fontWeight: 500,
+          lineHeight: 1.45,
           marginTop: 0,
-          marginBottom: 10,
+          marginBottom: 12,
+          textWrap: "balance",
         }}
       >
         {subtitulo}
@@ -827,11 +854,12 @@ function VistaCromo({
             background: "transparent",
             color: COLORS.bg,
             border: `2px solid ${COLORS.bg}`,
-            padding: "12px 24px",
-            fontSize: 14,
-            fontWeight: 900,
-            letterSpacing: 2,
-            borderRadius: 999,
+            padding: "14px 32px",
+            fontFamily: FUENTES.POSTER,
+            fontSize: 20,
+            fontWeight: 400,
+            letterSpacing: 3,
+            borderRadius: 0,
             opacity: generando ? 0.5 : 1,
           }}
         >
@@ -844,15 +872,16 @@ function VistaCromo({
           style={{
             background: COLORS.gold,
             color: COLORS.text,
-            border: "none",
-            padding: "12px 24px",
-            fontSize: 14,
-            fontWeight: 900,
-            letterSpacing: 2,
-            borderRadius: 999,
+            border: `2px solid ${COLORS.text}`,
+            padding: "14px 32px",
+            fontFamily: FUENTES.POSTER,
+            fontSize: 22,
+            fontWeight: 400,
+            letterSpacing: 3,
+            borderRadius: 0,
             opacity: generando ? 0.7 : 1,
             cursor: generando ? "wait" : "pointer",
-            boxShadow: `4px 4px 0 ${COLORS.text}`,
+            boxShadow: `5px 5px 0 ${COLORS.text}`,
           }}
         >
           {generando
@@ -866,9 +895,9 @@ function VistaCromo({
         <p
           style={{
             color: COLORS.gold,
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
+            fontFamily: FUENTES.UI,
             fontSize: 14,
+            fontWeight: 500,
             maxWidth: 360,
             textAlign: "center",
             margin: 0,
@@ -879,10 +908,10 @@ function VistaCromo({
       )}
       <p
         style={{
-          color: "rgba(255,255,255,0.6)",
-          fontFamily: "Georgia, serif",
-          fontStyle: "italic",
+          color: "rgba(255,255,255,0.7)",
+          fontFamily: FUENTES.UI,
           fontSize: 13,
+          fontWeight: 500,
           maxWidth: 360,
           textAlign: "center",
         }}
@@ -917,10 +946,10 @@ function VistaCromo({
           </div>
           <p
             style={{
-              fontFamily: "Georgia, serif",
-              fontStyle: "italic",
+              fontFamily: FUENTES.UI,
               color: COLORS.bg,
               fontSize: 14,
+              fontWeight: 500,
               lineHeight: 1.5,
               margin: 0,
             }}

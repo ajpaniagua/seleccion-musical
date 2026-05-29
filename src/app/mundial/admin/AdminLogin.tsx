@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { COLORS } from "@/lib/colores";
+import { FUENTES } from "@/lib/tipografias";
 
 export function AdminLogin() {
   const [pass, setPass] = useState("");
@@ -41,14 +42,15 @@ export function AdminLogin() {
         padding: 20,
       }}
     >
-      <div style={{ width: "100%", maxWidth: 380, textAlign: "center" }}>
+      <div style={{ width: "100%", maxWidth: 420, textAlign: "center" }}>
         <div
           style={{
             color: COLORS.gold,
             fontSize: 11,
             fontWeight: 900,
-            letterSpacing: 4,
-            marginBottom: 8,
+            letterSpacing: 5,
+            marginBottom: 10,
+            fontFamily: FUENTES.UI,
           }}
         >
           ★ DASHBOARD ★
@@ -56,22 +58,24 @@ export function AdminLogin() {
         <h1
           style={{
             margin: 0,
-            fontSize: 32,
-            fontWeight: 900,
-            fontStyle: "italic",
+            fontFamily: FUENTES.POSTER,
+            fontSize: "clamp(40px, 9vw, 64px)",
+            fontWeight: 400,
             letterSpacing: -1,
-            lineHeight: 1,
+            lineHeight: 0.9,
+            color: COLORS.text,
+            whiteSpace: "nowrap",
           }}
         >
-          La selección musical
+          LA SELECCIÓN MUSICAL
         </h1>
         <p
           style={{
-            fontFamily: "Georgia, serif",
+            fontFamily: FUENTES.EDITORIAL,
             fontStyle: "italic",
             color: "#555",
-            marginTop: 12,
-            fontSize: 14,
+            marginTop: 14,
+            fontSize: 15,
           }}
         >
           Introduce la contraseña de Arturo para acceder al panel.
@@ -87,8 +91,9 @@ export function AdminLogin() {
               width: "100%",
               padding: "14px 16px",
               fontSize: 16,
+              fontFamily: FUENTES.UI,
               border: `2px solid ${COLORS.text}`,
-              borderRadius: 10,
+              borderRadius: 0,
               outline: "none",
               background: COLORS.bg,
             }}
@@ -104,13 +109,14 @@ export function AdminLogin() {
               width: "100%",
               background: enviando ? "#888" : COLORS.text,
               color: COLORS.bg,
-              border: "none",
-              padding: "14px",
-              fontSize: 14,
-              fontWeight: 900,
-              letterSpacing: 2,
-              borderRadius: 999,
-              boxShadow: enviando ? "none" : `4px 4px 0 ${COLORS.gold}`,
+              border: `2px solid ${COLORS.text}`,
+              padding: "16px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 22,
+              fontWeight: 400,
+              letterSpacing: 4,
+              borderRadius: 0,
+              boxShadow: enviando ? "none" : `5px 5px 0 ${COLORS.gold}`,
               cursor: enviando ? "wait" : "pointer",
             }}
           >

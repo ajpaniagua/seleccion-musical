@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { COLORS } from "@/lib/colores";
+import { FUENTES } from "@/lib/tipografias";
 
 type Top = { nombre: string; total: number };
 type TopHimno = { cancion: string; artista: string; total: number };
@@ -173,6 +174,7 @@ export function AdminDashboard() {
               fontSize: 11,
               fontWeight: 900,
               letterSpacing: 4,
+              fontFamily: FUENTES.UI,
             }}
           >
             ★ DASHBOARD
@@ -180,30 +182,34 @@ export function AdminDashboard() {
           <h1
             style={{
               margin: "4px 0 0",
-              fontSize: 26,
-              fontWeight: 900,
-              fontStyle: "italic",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 38,
+              fontWeight: 400,
               letterSpacing: -0.5,
+              lineHeight: 0.95,
+              color: COLORS.text,
             }}
           >
-            La selección musical
+            LA SELECCIÓN MUSICAL
           </h1>
         </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button
             onClick={reenriquecer}
             disabled={enriqueciendo}
             style={{
               background: COLORS.gold,
               color: COLORS.text,
-              border: "none",
+              border: `2px solid ${COLORS.text}`,
               padding: "8px 18px",
-              fontSize: 12,
-              fontWeight: 900,
-              letterSpacing: 1.5,
-              borderRadius: 999,
+              fontFamily: FUENTES.POSTER,
+              fontSize: 16,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
               cursor: enriqueciendo ? "wait" : "pointer",
               opacity: enriqueciendo ? 0.7 : 1,
+              boxShadow: `3px 3px 0 ${COLORS.text}`,
             }}
           >
             {enriqueciendo ? "LANZANDO…" : "REENRIQUECER ARTISTAS"}
@@ -212,12 +218,13 @@ export function AdminDashboard() {
             onClick={logout}
             style={{
               background: "transparent",
-              border: `1.5px solid ${COLORS.text}`,
+              border: `2px solid ${COLORS.text}`,
               padding: "8px 18px",
-              fontSize: 12,
-              fontWeight: 900,
-              letterSpacing: 1.5,
-              borderRadius: 999,
+              fontFamily: FUENTES.POSTER,
+              fontSize: 16,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
               cursor: "pointer",
             }}
           >
@@ -713,22 +720,31 @@ function Card({
     <div
       style={{
         background: COLORS.paper,
-        border: `1px solid ${COLORS.gold}`,
-        borderRadius: 10,
+        border: `2px solid ${COLORS.gold}`,
+        borderRadius: 0,
         padding: 16,
       }}
     >
-      <div style={{ fontSize: 10, letterSpacing: 2, color: "#888", fontWeight: 900 }}>
+      <div
+        style={{
+          fontSize: 10,
+          letterSpacing: 2,
+          color: "#888",
+          fontWeight: 900,
+          fontFamily: FUENTES.UI,
+        }}
+      >
         {titulo.toUpperCase()}
       </div>
       <div
         style={{
-          fontSize: 28,
-          fontWeight: 900,
-          fontStyle: "italic",
+          fontFamily: FUENTES.POSTER,
+          fontSize: 44,
+          fontWeight: 400,
           color: COLORS.text,
-          letterSpacing: -1,
-          marginTop: 4,
+          letterSpacing: -0.5,
+          marginTop: 2,
+          lineHeight: 1,
         }}
       >
         {valor}
@@ -836,13 +852,14 @@ function SerieGrafico({ serie }: { serie: SerieDia[] }) {
 
 function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <section style={{ marginBottom: 28 }}>
+    <section style={{ marginBottom: 32 }}>
       <h2
         style={{
-          margin: "0 0 10px",
-          fontSize: 13,
-          letterSpacing: 2,
-          fontWeight: 900,
+          margin: "0 0 12px",
+          fontFamily: FUENTES.POSTER,
+          fontSize: 22,
+          letterSpacing: 3,
+          fontWeight: 400,
           color: COLORS.text,
         }}
       >
@@ -913,13 +930,15 @@ function BotonCsv({ href, label }: { href: string; label: string }) {
       style={{
         background: COLORS.text,
         color: COLORS.bg,
-        padding: "10px 18px",
-        fontSize: 12,
-        fontWeight: 900,
-        letterSpacing: 1.5,
-        borderRadius: 999,
+        padding: "10px 20px",
+        fontFamily: FUENTES.POSTER,
+        fontSize: 18,
+        fontWeight: 400,
+        letterSpacing: 2,
+        borderRadius: 0,
+        border: `2px solid ${COLORS.text}`,
         textDecoration: "none",
-        boxShadow: `3px 3px 0 ${COLORS.gold}`,
+        boxShadow: `4px 4px 0 ${COLORS.gold}`,
       }}
     >
       ↓ {label.toUpperCase()}
