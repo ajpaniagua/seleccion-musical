@@ -53,21 +53,33 @@ export default function MundialPage() {
       <h1
         style={{
           margin: 0,
-          fontSize: "clamp(40px, 8vw, 72px)",
           fontWeight: 900,
           fontStyle: "italic",
           letterSpacing: -2,
           lineHeight: 0.95,
-          maxWidth: 800,
         }}
       >
-        La selección musical
-        <br />
         <span
           style={{
+            display: "block",
+            // Tamaño calculado para que "La selección musical" (20 char) tenga
+            // un ancho parecido al de "DE MI VIDA" (10 char) abajo. nowrap
+            // garantiza que nunca se parta en dos líneas, y el clamp baja en
+            // pantallas estrechas para no desbordar lateralmente.
+            fontSize: "clamp(26px, 5.6vw, 50px)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          La selección musical
+        </span>
+        <span
+          style={{
+            display: "block",
             color: COLORS.gold,
-            fontSize: "clamp(48px, 10vw, 96px)",
+            fontSize: "clamp(40px, 10vw, 90px)",
             textShadow: `4px 4px 0 ${COLORS.text}`,
+            whiteSpace: "nowrap",
+            marginTop: 4,
           }}
         >
           DE MI VIDA
@@ -130,7 +142,36 @@ export default function MundialPage() {
           fontStyle: "italic",
         }}
       >
-        Un proyecto de Arturo Paniagua · arturopaniagua.com
+        Un proyecto de{" "}
+        <a
+          href="https://arturopaniagua.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: COLORS.text,
+            fontWeight: 700,
+            textDecoration: "underline",
+            textDecorationColor: COLORS.gold,
+            textUnderlineOffset: 3,
+          }}
+        >
+          Arturo Paniagua
+        </a>{" "}
+        ·{" "}
+        <a
+          href="https://arturopaniagua.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: COLORS.text,
+            fontWeight: 700,
+            textDecoration: "underline",
+            textDecorationColor: COLORS.gold,
+            textUnderlineOffset: 3,
+          }}
+        >
+          arturopaniagua.com
+        </a>
       </footer>
     </main>
   );
