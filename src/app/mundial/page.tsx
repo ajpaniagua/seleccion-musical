@@ -186,24 +186,55 @@ export default function MundialPage() {
             fontSize: 12,
             color: "#666",
             fontFamily: FUENTES.UI,
-            fontStyle: "italic",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 10,
+            maxWidth: 560,
           }}
         >
-          Un proyecto de Arturo Paniagua ·{" "}
-          <a
-            href="https://arturopaniagua.com"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div style={{ fontStyle: "italic" }}>
+            Un proyecto de Arturo Paniagua ·{" "}
+            <a
+              href="https://arturopaniagua.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: COLORS.text,
+                fontWeight: 700,
+                textDecoration: "underline",
+                textDecorationColor: COLORS.gold,
+                textUnderlineOffset: 3,
+              }}
+            >
+              arturopaniagua.com
+            </a>{" "}
+            ·{" "}
+            <Link
+              href="/mundial/legal"
+              style={{
+                color: COLORS.text,
+                fontStyle: "normal",
+                fontWeight: 700,
+                textDecoration: "underline",
+                textDecorationColor: COLORS.gold,
+                textUnderlineOffset: 3,
+              }}
+            >
+              Aviso legal y privacidad
+            </Link>
+          </div>
+          <div
             style={{
-              color: COLORS.text,
-              fontWeight: 700,
-              textDecoration: "underline",
-              textDecorationColor: COLORS.gold,
-              textUnderlineOffset: 3,
+              fontSize: 11,
+              color: "#888",
+              lineHeight: 1.5,
+              textWrap: "balance",
             }}
           >
-            arturopaniagua.com
-          </a>
+            Proyecto editorial independiente. No asociado con la FIFA, UEFA,
+            RFEF ni ninguna federación deportiva.
+          </div>
         </footer>
       </div>
     </main>

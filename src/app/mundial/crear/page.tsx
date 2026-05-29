@@ -8,6 +8,7 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Banquillo } from "@/components/Banquillo";
 import { Buscador } from "@/components/Buscador";
@@ -475,6 +476,36 @@ export default function CrearPage() {
         </button>
       </div>
 
+      <footer
+        style={{
+          marginTop: 48,
+          paddingTop: 20,
+          borderTop: `1px solid ${COLORS.paper}`,
+          fontFamily: FUENTES.UI,
+          fontSize: 12,
+          color: "#888",
+          textAlign: "center",
+          lineHeight: 1.6,
+        }}
+      >
+        <Link
+          href="/mundial/legal"
+          style={{
+            color: "#666",
+            fontWeight: 700,
+            textDecoration: "underline",
+            textDecorationColor: COLORS.gold,
+            textUnderlineOffset: 3,
+          }}
+        >
+          Aviso legal y privacidad
+        </Link>
+        <div style={{ fontSize: 11, marginTop: 6, textWrap: "balance" }}>
+          Proyecto editorial independiente. No asociado con la FIFA, UEFA,
+          RFEF ni ninguna federación deportiva.
+        </div>
+      </footer>
+
       {abierto?.tipo === "himno" && (
         <Buscador
           modo="cancion"
@@ -918,6 +949,35 @@ function VistaCromo({
       >
         {movil ? TEXTOS.notaDescargarMovil : TEXTOS.notaDescargarDesktop}
       </p>
+
+      <footer
+        style={{
+          marginTop: 32,
+          fontFamily: FUENTES.UI,
+          fontSize: 12,
+          color: "rgba(255,255,255,0.55)",
+          textAlign: "center",
+          lineHeight: 1.6,
+          maxWidth: 380,
+        }}
+      >
+        <Link
+          href="/mundial/legal"
+          style={{
+            color: "rgba(255,255,255,0.7)",
+            fontWeight: 700,
+            textDecoration: "underline",
+            textDecorationColor: COLORS.gold,
+            textUnderlineOffset: 3,
+          }}
+        >
+          Aviso legal y privacidad
+        </Link>
+        <div style={{ fontSize: 11, marginTop: 6, textWrap: "balance" }}>
+          Proyecto editorial independiente. No asociado con la FIFA, UEFA,
+          RFEF ni ninguna federación deportiva.
+        </div>
+      </footer>
 
       {/* Prompt para compartir con Arturo: aparece cuando el usuario ya ha
           generado el PNG (es decir, cuando hay aviso de descarga/compartido). */}
