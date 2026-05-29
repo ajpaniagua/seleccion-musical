@@ -90,7 +90,9 @@ export default function PreviewPage() {
             <span
               style={{
                 display: "block",
-                fontSize: "clamp(48px, 8.4vw, 96px)",
+                // min más bajo para que en iPhone (375px) "LA SELECCIÓN MUSICAL"
+                // siga cabiendo en una sola línea sin desbordar lateralmente.
+                fontSize: "clamp(28px, 8vw, 96px)",
                 color: COLORS.text,
                 whiteSpace: "nowrap",
               }}
@@ -100,7 +102,7 @@ export default function PreviewPage() {
             <span
               style={{
                 display: "block",
-                fontSize: "clamp(82px, 16vw, 200px)",
+                fontSize: "clamp(52px, 16vw, 200px)",
                 color: COLORS.gold,
                 textShadow: `5px 5px 0 ${COLORS.text}`,
                 whiteSpace: "nowrap",
@@ -128,25 +130,19 @@ export default function PreviewPage() {
           banquillo de lujo. <strong>Solo te llevará 5 minutos.</strong>
         </p>
 
-        {/* Cromo como héroe central. El scale 1.2 no reserva espacio en el
-            layout, así que reservamos un padding-bottom equivalente para que
-            el CTA siguiente no se solape. */}
-        <div
-          style={{
-            marginTop: 32,
-            transform: "scale(1.2)",
-            transformOrigin: "top",
-            paddingBottom: "20%",
-          }}
-        >
-          <CromoDemo />
+        {/* Cromo como héroe central. Usamos el prop `escala` del componente
+            (que envuelve internamente con transform + ResizeObserver) en lugar
+            de aplicar el scale por fuera: así el layout reserva el espacio
+            correcto y no se solapa con el CTA. */}
+        <div style={{ marginTop: 32 }}>
+          <CromoDemo escala={1.2} />
         </div>
 
         <Link
           href="/mundial/crear"
           style={{
             display: "inline-block",
-            marginTop: 48,
+            marginTop: 40,
             background: COLORS.text,
             color: COLORS.bg,
             padding: "20px 52px",

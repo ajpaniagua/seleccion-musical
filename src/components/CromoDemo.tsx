@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { COLORS } from "@/lib/colores";
 import { Jugador } from "./Jugador";
 
@@ -41,15 +42,39 @@ const BANQUILLO = [
   { nombre: "Frank Sinatra", foto: D("e22ed29d34715f53323c6d190410a27c") },
 ];
 
+type Props = {
+  /**
+   * Factor de escala visual. Si lo pasas distinto a 1, el componente se
+   * envuelve con transform: scale + ResizeObserver para que el layout
+   * exterior reserve el espacio escalado y no se solapen el CTA o el
+   * siguiente bloque.
+   */
+  escala?: number;
+};
+
 /**
  * Vista parcial del cromo para la landing: solo himno, once y banquillo.
  * No es el cromo completo (no incluye título "La selección musical DE MI VIDA"
  * ni seleccionador ni footer), solo lo justo para que el visitante entienda
  * el formato sin duplicar el título de la landing.
  */
-export function CromoDemo() {
-  return (
+export function CromoDemo({ escala = 1 }: Props = {}) {
+  const cromoRef = useRef<HTMLDivElement>(null);
+  const [altoBase, setAltoBase] = useState(0);
+
+  useEffect(() => {
+    if (escala === 1 || !cromoRef.current) return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h && h > 0) setAltoBase(h);
+    });
+    ro.observe(cromoRef.current);
+    return () => ro.disconnect();
+  }, [escala]);
+
+  const cromo = (
     <div
+      ref={cromoRef}
       style={{
         width: "100%",
         maxWidth: 360,
@@ -294,6 +319,32 @@ export function CromoDemo() {
             />
           ))}
         </div>
+      </div>
+    </div>
+  );
+
+  if (escala === 1) return cromo;
+
+  // Con escala, envolvemos en un wrapper de dimensiones escaladas para que
+  // el layout exterior reserve el espacio real ocupado y el siguiente
+  // elemento no se solape.
+  return (
+    <div
+      style={{
+        width: 360 * escala,
+        height: altoBase ? altoBase * escala : undefined,
+        // Mientras se mide la altura por primera vez (altoBase = 0),
+        // dejamos auto para que tome el espacio que necesite.
+      }}
+    >
+      <div
+        style={{
+          width: 360,
+          transformOrigin: "top left",
+          transform: `scale(${escala})`,
+        }}
+      >
+        {cromo}
       </div>
     </div>
   );
