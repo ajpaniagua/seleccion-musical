@@ -39,6 +39,34 @@ export async function generarPngCromo(nodo: HTMLElement): Promise<Blob> {
   ctx.fillStyle = FONDO_FINAL;
   ctx.fillRect(0, 0, ANCHO_FINAL, ALTO_FINAL);
 
+  // Mismo gradiente dorado del cromo, aplicado a todo el lienzo para que no
+  // se vea un corte entre la zona del cromo y el padding 9:16.
+  const grad1 = ctx.createRadialGradient(
+    ANCHO_FINAL * 0.1,
+    ALTO_FINAL * 0.1,
+    0,
+    ANCHO_FINAL * 0.1,
+    ALTO_FINAL * 0.1,
+    ANCHO_FINAL * 0.55
+  );
+  grad1.addColorStop(0, "rgba(212,162,46,0.28)");
+  grad1.addColorStop(1, "rgba(212,162,46,0)");
+  ctx.fillStyle = grad1;
+  ctx.fillRect(0, 0, ANCHO_FINAL, ALTO_FINAL);
+
+  const grad2 = ctx.createRadialGradient(
+    ANCHO_FINAL * 0.9,
+    ALTO_FINAL * 0.9,
+    0,
+    ANCHO_FINAL * 0.9,
+    ALTO_FINAL * 0.9,
+    ANCHO_FINAL * 0.55
+  );
+  grad2.addColorStop(0, "rgba(212,162,46,0.2)");
+  grad2.addColorStop(1, "rgba(212,162,46,0)");
+  ctx.fillStyle = grad2;
+  ctx.fillRect(0, 0, ANCHO_FINAL, ALTO_FINAL);
+
   // Dibujamos el cromo centrado. Si por lo que sea no cupiera en altura,
   // lo escalamos manteniendo proporción (defensivo, no debería ocurrir).
   const cromoW = cromoCanvas.width;
