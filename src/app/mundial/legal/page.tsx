@@ -106,15 +106,15 @@ export default function LegalPage() {
 
         <Bloque titulo="QUIÉN ESTÁ DETRÁS">
           <p>
-            Responsable del proyecto: <strong>Arturo Paniagua</strong>{" "}
-            (periodista musical). El sitio principal del autor es{" "}
+            Responsable del proyecto: <strong>Arturo Paniagua</strong>. El
+            sitio principal del autor es{" "}
             <a href="https://arturopaniagua.com" style={enlace}>
               arturopaniagua.com
             </a>
             . Para cualquier consulta relacionada con esta herramienta o tus
             datos, puedes escribir a{" "}
-            <a href="mailto:hola@arturopaniagua.com" style={enlace}>
-              hola@arturopaniagua.com
+            <a href="mailto:info@arturopaniagua.com" style={enlace}>
+              info@arturopaniagua.com
             </a>
             .
           </p>
@@ -202,8 +202,8 @@ export default function LegalPage() {
             guardamos tu identidad, para localizar tu selección necesitaremos
             que nos indiques aproximadamente cuándo la creaste y, si la
             firmaste, con qué @. Escríbenos a{" "}
-            <a href="mailto:hola@arturopaniagua.com" style={enlace}>
-              hola@arturopaniagua.com
+            <a href="mailto:info@arturopaniagua.com" style={enlace}>
+              info@arturopaniagua.com
             </a>{" "}
             y la borraremos.
           </p>
@@ -237,8 +237,8 @@ export default function LegalPage() {
           <p>
             Si eres titular de derechos sobre alguno de los contenidos
             referenciados y deseas que dejemos de mostrarlo, escríbenos a{" "}
-            <a href="mailto:hola@arturopaniagua.com" style={enlace}>
-              hola@arturopaniagua.com
+            <a href="mailto:info@arturopaniagua.com" style={enlace}>
+              info@arturopaniagua.com
             </a>{" "}
             y lo retiraremos.
           </p>
