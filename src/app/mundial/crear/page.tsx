@@ -231,16 +231,32 @@ export default function CrearPage() {
         <h1
           style={{
             margin: 0,
-            fontSize: 36,
             fontWeight: 900,
             fontStyle: "italic",
             letterSpacing: -1.5,
             lineHeight: 1,
           }}
         >
-          La selección musical
-          <br />
-          <span style={{ color: COLORS.gold, fontSize: 44 }}>DE MI VIDA</span>
+          <span
+            style={{
+              display: "block",
+              fontSize: "clamp(22px, 5vw, 38px)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            La selección musical
+          </span>
+          <span
+            style={{
+              display: "block",
+              color: COLORS.gold,
+              fontSize: "clamp(34px, 9vw, 68px)",
+              whiteSpace: "nowrap",
+              marginTop: 2,
+            }}
+          >
+            DE MI VIDA
+          </span>
         </h1>
         <p
           style={{

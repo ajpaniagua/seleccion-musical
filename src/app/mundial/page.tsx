@@ -107,9 +107,9 @@ export default function MundialPage() {
         style={{
           fontFamily: "Georgia, serif",
           fontStyle: "italic",
-          fontSize: 13,
-          color: "#888",
-          marginTop: 10,
+          fontSize: 14,
+          color: "#444",
+          marginTop: 12,
         }}
       >
         {TEXTOS.landingDemoNota}

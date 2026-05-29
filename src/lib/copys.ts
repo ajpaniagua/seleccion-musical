@@ -5,7 +5,7 @@
 export const COPYS = {
   himno: {
     titulo: "Tu himno",
-    subtitulo: "La canción que mejor te define y cuenta tu gusto musical. La que pondrías sin dudar para presentarte al mundo.",
+    subtitulo: "La canción que mejor te define y cuenta tu gusto musical. La que pondrías para presentarte al mundo.",
   },
   seleccionador: {
     titulo: "Tu seleccionador",
@@ -27,7 +27,7 @@ export const TEXTOS = {
   constructorIntro:
     "Arma tu selección con los artistas y canciones que mejor representan tu universo musical. Crear tu cromo solo te llevará 5 minutos.",
   landingIntro:
-    "Arma tu propia selección con los artistas más importantes de tu vida, los que te definen.",
+    "Arma tu propia selección con los artistas y bandas más importantes de tu vida, los que te definen.",
   landingDemoNota: "Así se verá tu cromo, listo para compartir en Instagram.",
   tipDrag: "Mantén pulsado un jugador para moverlo a otra posición.",
   postShareLead:
