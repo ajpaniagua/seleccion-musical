@@ -369,6 +369,19 @@ export default function CrearPage() {
       </Seccion>
 
       <Seccion titulo="ONCE INICIAL · 4-3-3" subtitulo={COPYS.once.subtitulo}>
+        <p
+          style={{
+            fontFamily: "Georgia, serif",
+            fontStyle: "italic",
+            color: "#888",
+            fontSize: 12,
+            marginTop: -8,
+            marginBottom: 12,
+            textAlign: "center",
+          }}
+        >
+          💡 Tip: mantén pulsado un jugador para arrastrarlo a otra posición.
+        </p>
         <Campo
           portero={seleccion.portero}
           defensas={seleccion.defensas}
@@ -389,7 +402,7 @@ export default function CrearPage() {
 
       <Seccion
         titulo="FIRMA"
-        subtitulo="Pon tu @ para firmar tu cromo. Es opcional, pero la gente verá quién armó esta selección."
+        subtitulo="Pon tu @ de Instagram para firmar tu cromo. Es opcional, pero así Arturo podrá comentar tu selección si le encanta."
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 22, fontWeight: 900, color: COLORS.text }}>@</span>
@@ -401,7 +414,7 @@ export default function CrearPage() {
                 usuario: e.target.value.replace(/[^a-zA-Z0-9_.]/g, "").slice(0, 30),
               }))
             }
-            placeholder="tu_usuario"
+            placeholder="tu_usuario_de_instagram"
             style={{
               flex: 1,
               padding: "10px 14px",
@@ -885,6 +898,60 @@ function VistaCromo({
           ? "Pulsa el botón para abrir el panel de compartir y subirla a Stories, WhatsApp o X."
           : "Pulsa el botón para descargar la imagen. Luego súbela a Stories, X o WhatsApp."}
       </p>
+
+      {/* Prompt para compartir con Arturo: aparece cuando el usuario ya ha
+          generado el PNG (es decir, cuando hay aviso de descarga/compartido). */}
+      {aviso && (
+        <div
+          style={{
+            marginTop: 8,
+            padding: "16px 20px",
+            background: "rgba(212,162,46,0.12)",
+            border: `1.5px solid ${COLORS.gold}`,
+            borderRadius: 12,
+            maxWidth: 380,
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: 2,
+              color: COLORS.gold,
+              fontWeight: 900,
+              marginBottom: 6,
+            }}
+          >
+            ★ HAZ QUE TE VEA
+          </div>
+          <p
+            style={{
+              fontFamily: "Georgia, serif",
+              fontStyle: "italic",
+              color: COLORS.bg,
+              fontSize: 14,
+              lineHeight: 1.5,
+              margin: 0,
+            }}
+          >
+            Sube tu cromo a Stories y etiqueta a{" "}
+            <a
+              href="https://instagram.com/ajpaniagua"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: COLORS.gold,
+                fontStyle: "normal",
+                fontWeight: 900,
+                textDecoration: "none",
+              }}
+            >
+              @ajpaniagua
+            </a>
+            . Arturo comentará las selecciones más interesantes.
+          </p>
+        </div>
+      )}
     </main>
   );
 }

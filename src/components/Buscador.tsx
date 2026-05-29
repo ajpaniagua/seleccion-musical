@@ -31,9 +31,19 @@ export function Buscador(props: Props) {
   const [resultadosCan, setResultadosCan] = useState<Cancion[]>([]);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [movil, setMovil] = useState(false);
   const debounced = useDebounce(query, 400);
   const ultimaBusquedaLogueada = useRef<string>("");
   const seleccionoAlgo = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 640px)");
+    setMovil(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setMovil(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // Loguea cada nueva búsqueda debounced (anadido=false provisionalmente)
   useEffect(() => {
@@ -99,12 +109,12 @@ export function Buscador(props: Props) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(4px)",
+        background: movil ? COLORS.bg : "rgba(0,0,0,0.6)",
+        backdropFilter: movil ? undefined : "blur(4px)",
         display: "flex",
-        alignItems: "flex-start",
+        alignItems: movil ? "stretch" : "flex-start",
         justifyContent: "center",
-        padding: "5vh 16px",
+        padding: movil ? 0 : "5vh 16px",
         zIndex: 100,
       }}
     >
@@ -113,13 +123,14 @@ export function Buscador(props: Props) {
         style={{
           background: COLORS.bg,
           width: "100%",
-          maxWidth: 480,
-          borderRadius: 12,
+          maxWidth: movil ? "100%" : 480,
+          borderRadius: movil ? 0 : 12,
           overflow: "hidden",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+          boxShadow: movil ? "none" : "0 20px 60px rgba(0,0,0,0.5)",
           display: "flex",
           flexDirection: "column",
-          maxHeight: "90vh",
+          maxHeight: movil ? "100vh" : "90vh",
+          height: movil ? "100vh" : undefined,
         }}
       >
         <header

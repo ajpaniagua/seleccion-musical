@@ -46,7 +46,7 @@ export function Banquillo({ banquillo, onAbrirSlot, onLimpiarSlot }: Props) {
             dndId={`banquillo-${i}`}
             artista={a}
             size="tiny"
-            etiqueta={`#${i + 1}`}
+            etiqueta="Suplente"
             onClick={() => onAbrirSlot(i)}
             onRemove={() => onLimpiarSlot(i)}
           />

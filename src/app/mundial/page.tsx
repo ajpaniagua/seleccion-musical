@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CromoDemo } from "@/components/CromoDemo";
 import { COLORS } from "@/lib/colores";
 
 export const metadata: Metadata = {
@@ -86,6 +87,21 @@ export default function MundialPage() {
         Arma tu propia selección con los músicos que han sido importantes en tu vida.
         Un himno, un seleccionador, un once titular y un banquillo de lujo.
       </p>
+
+      <div style={{ marginTop: 32 }}>
+        <CromoDemo />
+      </div>
+      <div
+        style={{
+          fontFamily: "Georgia, serif",
+          fontStyle: "italic",
+          fontSize: 13,
+          color: "#888",
+          marginTop: 10,
+        }}
+      >
+        Así se verá tu cromo, listo para Stories.
+      </div>
 
       <Link
         href="/mundial/crear"

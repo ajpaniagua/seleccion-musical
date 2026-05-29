@@ -1,6 +1,7 @@
 "use client";
 
 import { useDraggable, useDroppable } from "@dnd-kit/core";
+import { useEffect, useRef, useState } from "react";
 import { COLORS } from "@/lib/colores";
 import type { Artista } from "@/lib/tipos";
 import { partirNombre } from "@/utils/partirNombre";
@@ -36,6 +37,18 @@ export function SlotJugador({
   const partido = artista ? partirNombre(artista.nombre) : null;
   const colorNombre = bgOscuro ? COLORS.bg : COLORS.text;
   const sombraNombre = bgOscuro ? "0 1px 2px rgba(0,0,0,0.9)" : "none";
+
+  // Pulse dorado cuando un slot pasa de vacío a tener artista.
+  const previaTuvoArtista = useRef(!!artista);
+  const [recienAnadido, setRecienAnadido] = useState(false);
+  useEffect(() => {
+    if (artista && !previaTuvoArtista.current) {
+      setRecienAnadido(true);
+      const t = setTimeout(() => setRecienAnadido(false), 600);
+      return () => clearTimeout(t);
+    }
+    previaTuvoArtista.current = !!artista;
+  }, [artista]);
 
   const draggable = useDraggable({
     id: dndId ?? "_disabled-drag",
@@ -102,9 +115,14 @@ export function SlotJugador({
           justifyContent: "center",
           boxShadow: isOver
             ? `0 0 0 3px ${COLORS.gold}`
-            : artista
-              ? "0 2px 5px rgba(0,0,0,0.4)"
-              : "none",
+            : recienAnadido
+              ? `0 0 0 4px ${COLORS.gold}, 0 0 20px rgba(212,162,46,0.8)`
+              : artista
+                ? "0 2px 5px rgba(0,0,0,0.4)"
+                : "none",
+          transform: recienAnadido ? "scale(1.15)" : "scale(1)",
+          transition:
+            "box-shadow 280ms ease-out, transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1)",
         }}
       >
         {artista ? (
