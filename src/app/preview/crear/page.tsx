@@ -391,8 +391,8 @@ export default function CrearPage() {
             color: "#888",
             fontSize: 12,
             fontWeight: 500,
-            marginTop: -8,
-            marginBottom: 12,
+            marginTop: 4,
+            marginBottom: 14,
             textAlign: "center",
           }}
         >
