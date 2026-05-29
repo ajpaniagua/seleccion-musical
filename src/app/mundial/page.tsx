@@ -142,22 +142,7 @@ export default function MundialPage() {
           fontStyle: "italic",
         }}
       >
-        Un proyecto de{" "}
-        <a
-          href="https://arturopaniagua.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            color: COLORS.text,
-            fontWeight: 700,
-            textDecoration: "underline",
-            textDecorationColor: COLORS.gold,
-            textUnderlineOffset: 3,
-          }}
-        >
-          Arturo Paniagua
-        </a>{" "}
-        ·{" "}
+        Un proyecto de Arturo Paniagua ·{" "}
         <a
           href="https://arturopaniagua.com"
           target="_blank"

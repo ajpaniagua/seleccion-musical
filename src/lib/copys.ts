@@ -5,19 +5,19 @@
 export const COPYS = {
   himno: {
     titulo: "Tu himno",
-    subtitulo: "La canción que mejor te define. La que pondrías para presentarte al mundo.",
+    subtitulo: "La canción que mejor te define y cuenta tu gusto musical. La que pondrías sin dudar para presentarte al mundo.",
   },
   seleccionador: {
     titulo: "Tu seleccionador",
-    subtitulo: "El que dirige tu sensibilidad musical. Tu maestro, tu brújula.",
+    subtitulo: "Ese artista que ha dirigido siempre tu sensibilidad musical. Tu maestro, tu brújula.",
   },
   once: {
     titulo: "Un artista para el once",
-    subtitulo: "Los once que siempre saltan al campo de tu vida. Los tuyos, no los más famosos.",
+    subtitulo: "Los once que siempre saltan al campo de tu vida. Los tuyos, no necesariamente los más famosos.",
   },
   banquillo: {
     titulo: "Un suplente",
-    subtitulo: "Los que también te han marcado. Los que entran cuando el partido lo pide.",
+    subtitulo: "Los que también te han marcado. Los que entran cuando el partido lo pide y aportan sus mejores cualidades.",
   },
 } as const;
 
@@ -25,15 +25,15 @@ export const TEXTOS = {
   firmaSubtitulo:
     "Opcional, pero así Arturo podrá comentar tu selección si le encanta.",
   constructorIntro:
-    "Arma tu selección con los artistas y canciones que mejor te representan. Solo te llevará 5 minutos.",
+    "Arma tu selección con los artistas y canciones que mejor representan tu universo musical. Crear tu cromo solo te llevará 5 minutos.",
   landingIntro:
-    "Arma tu propia selección con los músicos que han sido importantes en tu vida.",
-  landingDemoNota: "Así se verá tu cromo, listo para Stories.",
+    "Arma tu propia selección con los artistas más importantes de tu vida, los que te definen.",
+  landingDemoNota: "Así se verá tu cromo, listo para compartir en Instagram.",
   tipDrag: "Mantén pulsado un jugador para moverlo a otra posición.",
   postShareLead:
-    "Sube tu cromo a Stories y etiqueta a @ajpaniagua. Comentará las mejores.",
+    "Sube tu cromo a redes y etiqueta a @ajpaniagua. Estará pendiente de las mejores.",
   notaDescargarMovil:
     "Pulsa el botón para abrir el panel de compartir.",
   notaDescargarDesktop:
-    "Pulsa el botón para descargar la imagen y subirla a Stories.",
+    "Pulsa el botón para descargar la imagen y compartirla en tus redes.",
 };
