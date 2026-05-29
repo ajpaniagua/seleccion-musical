@@ -1,9 +1,17 @@
 import html2canvas from "html2canvas-pro";
 
+const ANCHO_FINAL = 1080;
+const ALTO_FINAL = 1920;
+const FONDO_FINAL = "#1a1410";
+
 /**
- * Genera un PNG del cromo escalado a ≈1080×1920 (2.25× sobre 480×853).
- * Usa html2canvas-pro porque maneja CORS limpiamente con useCORS:true,
- * a diferencia de html-to-image que se quedaba con los círculos en blanco.
+ * Genera un PNG 1080×1920 (9:16, formato Stories) del cromo:
+ *  1. Captura el cromo a su tamaño natural con html2canvas-pro.
+ *     html2canvas-pro maneja CORS limpiamente, a diferencia de html-to-image
+ *     que dejaba los círculos en blanco.
+ *  2. Lo dibuja centrado verticalmente sobre un lienzo 1080×1920 con el
+ *     mismo fondo oscuro del cromo, así el resultado siempre es 9:16
+ *     estricto (independientemente de cuánto contenido tenga el cromo).
  */
 export async function generarPngCromo(nodo: HTMLElement): Promise<Blob> {
   if (typeof document !== "undefined" && "fonts" in document) {
@@ -12,17 +20,44 @@ export async function generarPngCromo(nodo: HTMLElement): Promise<Blob> {
     } catch {}
   }
 
-  const canvas = await html2canvas(nodo, {
+  // Capturamos el cromo a 2.25× (480px de ancho → 1080px en el PNG)
+  const cromoCanvas = await html2canvas(nodo, {
     useCORS: true,
     allowTaint: false,
-    backgroundColor: "#1a1410",
+    backgroundColor: FONDO_FINAL,
     scale: 2.25,
     logging: false,
     imageTimeout: 12000,
   });
 
+  // Lienzo 1080×1920 con el fondo del marco
+  const finalCanvas = document.createElement("canvas");
+  finalCanvas.width = ANCHO_FINAL;
+  finalCanvas.height = ALTO_FINAL;
+  const ctx = finalCanvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas no disponible");
+  ctx.fillStyle = FONDO_FINAL;
+  ctx.fillRect(0, 0, ANCHO_FINAL, ALTO_FINAL);
+
+  // Dibujamos el cromo centrado. Si por lo que sea no cupiera en altura,
+  // lo escalamos manteniendo proporción (defensivo, no debería ocurrir).
+  const cromoW = cromoCanvas.width;
+  const cromoH = cromoCanvas.height;
+  let drawW = cromoW;
+  let drawH = cromoH;
+  let offsetX = Math.round((ANCHO_FINAL - cromoW) / 2);
+  let offsetY = Math.round((ALTO_FINAL - cromoH) / 2);
+  if (cromoH > ALTO_FINAL || cromoW > ANCHO_FINAL) {
+    const ratio = Math.min(ANCHO_FINAL / cromoW, ALTO_FINAL / cromoH);
+    drawW = cromoW * ratio;
+    drawH = cromoH * ratio;
+    offsetX = Math.round((ANCHO_FINAL - drawW) / 2);
+    offsetY = Math.round((ALTO_FINAL - drawH) / 2);
+  }
+  ctx.drawImage(cromoCanvas, offsetX, offsetY, drawW, drawH);
+
   return new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
+    finalCanvas.toBlob(
       (blob) => {
         if (blob) resolve(blob);
         else reject(new Error("No se pudo serializar el canvas a PNG"));
