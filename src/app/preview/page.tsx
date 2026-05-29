@@ -123,18 +123,21 @@ export default function PreviewPage() {
         <p
           style={{
             margin: "26px 0 0",
-            maxWidth: 720,
+            maxWidth: 560,
             fontFamily: "'Inter', sans-serif",
             fontSize: "clamp(15px, 2vw, 18px)",
             color: "#333",
             lineHeight: 1.45,
             fontWeight: 500,
+            // balance reparte las líneas con ancho parecido y evita viudas
+            // del tipo "de lujo." solo en su propia línea.
+            textWrap: "balance",
           }}
         >
           Tu once de música contra el mundo. Himno, seleccionador, titulares y
-          banquillo de lujo.
-          {/* Forzamos line break para que "Solo te llevará 5 minutos." NUNCA
-              se parta entre dos líneas y siempre sea su propia frase visual. */}
+          banquillo de{"\u00a0"}lujo.
+          {/* BR para que "Solo te llevará 5 minutos." siempre tenga su propia
+              línea, nunca arrastrado al final del párrafo anterior. */}
           <br />
           <strong style={{ whiteSpace: "nowrap" }}>
             Solo te llevará 5 minutos.
@@ -166,7 +169,19 @@ export default function PreviewPage() {
         {/* Cromo como referencia visual debajo, para que el visitante vea qué
             va a obtener si ya le ha llamado la atención lo suficiente como
             para no pulsar el CTA todavía. */}
-        <div style={{ marginTop: 40 }}>
+        <div
+          style={{
+            marginTop: 56,
+            fontFamily: POSTER,
+            fontSize: 14,
+            letterSpacing: 4,
+            color: "#666",
+            marginBottom: 14,
+          }}
+        >
+          ASÍ SE VERÁ TU CROMO EN REDES SOCIALES
+        </div>
+        <div>
           <CromoDemo escala={1.2} />
         </div>
 
