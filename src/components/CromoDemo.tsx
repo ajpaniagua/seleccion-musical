@@ -7,102 +7,110 @@ import { CromoFinal } from "./CromoFinal";
 const ESCALA = 0.42;
 const ANCHO_BASE = 480;
 
-// Fotos reales de Deezer cacheadas a través de nuestro proxy /api/foto.
-// Hardcoded para no tener que pegarle a la API en cada visita a la landing.
+// Selección demo curada para la landing: clásicos universales, géneros muy
+// diversos (soul, rock, jazz, reggae, pop, glam, funk, chanson, country,
+// folk latinoamericano, blues) y paridad fuerte (9 mujeres entre once y
+// banquillo). Hardcoded para no pegarle a la API en cada visita.
 const D = (hash: string) =>
   `https://cdn-images.dzcdn.net/images/artist/${hash}/1000x1000-000000-80-0-0.jpg`;
 
 const SELECCION_DEMO: Seleccion = {
   usuario: "tu_nombre",
-  himno: { id: "demo-1", titulo: "Mediterráneo", artista: "Joan Manuel Serrat" },
+  himno: { id: "h", titulo: "Imagine", artista: "John Lennon" },
   seleccionador: {
-    id: "demo-s",
-    nombre: "Bunbury",
-    foto: D("08b73c9b2f63b5e269efda3b1f762007"),
+    id: "s",
+    nombre: "Quincy Jones",
+    foto: D("71a51858525f1418ed4cb894690ab20e"),
   },
   portero: {
-    id: "demo-p",
-    nombre: "Camarón de la Isla",
-    foto: D("877069deb0f62bdd7584d268c863bd76"),
+    id: "p",
+    nombre: "Ella Fitzgerald",
+    foto: D("0250af414d882062b1a77aa9521b7331"),
   },
   defensas: [
-    { id: "d1", nombre: "Mecano", foto: D("a7335b62b37653e04be8a9ad32c7b7bd") },
+    { id: "d1", nombre: "Madonna", foto: D("2498e1e0c6930809143a743b746958be") },
     {
       id: "d2",
-      nombre: "Héroes del Silencio",
-      foto: D("8df7881250c96ec27bbf6dc92c89d393"),
+      nombre: "Stevie Wonder",
+      foto: D("b8138428e7b0ce78843106b4b83d4e77"),
     },
     {
       id: "d3",
-      nombre: "Los Planetas",
-      foto: D("17f8104eb19fc6c0d3049791b2a19f66"),
+      nombre: "Édith Piaf",
+      foto: D("242534322478decb42a2df37f712bbac"),
     },
     {
       id: "d4",
-      nombre: "Extremoduro",
-      foto: D("fac337de59e1a5ae1100c53f2685a53f"),
+      nombre: "Tina Turner",
+      foto: D("6dfabac67edec77d322a2d85be60d87a"),
     },
   ],
   medios: [
     {
       id: "m1",
-      nombre: "Antonio Vega",
-      foto: D("1498030d1f8288d0fc2c8ef25bb90339"),
+      nombre: "Bob Marley",
+      foto: D("c8241e15efdefa9465c7b470643efb3b"),
     },
     {
       id: "m2",
-      nombre: "Radio Futura",
-      foto: D("9ba13a68bdbfa282a6d0b6fa3c4ba0d8"),
+      nombre: "Nina Simone",
+      foto: D("b165a74366ee734abd789180099e129d"),
     },
-    { id: "m3", nombre: "Zahara", foto: D("04950881d6aa5deaed2ad09396fd1bb2") },
+    { id: "m3", nombre: "Prince", foto: D("85eec086152fb01d873ccdb0810e2660") },
   ],
   delanteros: [
     {
       id: "f1",
-      nombre: "Rosalía",
-      foto: D("96636156440182f1e7db3f77d39e6545"),
+      nombre: "David Bowie",
+      foto: D("8301a6a09a24f4bb35950c59717defa0"),
     },
     {
       id: "f2",
-      nombre: "Paco de Lucía",
-      foto: D("a39ed1db816ffe65ce47a3ed67831dca"),
+      nombre: "Aretha Franklin",
+      foto: D("4453648f7e780028c2be766b21474223"),
     },
     {
       id: "f3",
-      nombre: "C. Tangana",
-      foto: D("0e48ef0b911fe883e0eaa67350c85c46"),
+      nombre: "Michael Jackson",
+      foto: D("97fae13b2b30e4aec2e8c9e0c7839d92"),
     },
   ],
   banquillo: [
-    { id: "s1", nombre: "Amaia", foto: D("94692c20cfdae68537e615b3312f2146") },
+    {
+      id: "s1",
+      nombre: "Amy Winehouse",
+      foto: D("0cacb43a576b031eb169cca27171c1f5"),
+    },
     {
       id: "s2",
-      nombre: "Luz Casal",
-      foto: D("d6f2e5a62ed668f843060d3ceda9d57d"),
+      nombre: "Billie Holiday",
+      foto: D("6ef0c8b38d744ab219951165cd52e595"),
     },
-    { id: "s3", nombre: "Leiva", foto: D("d466308ffa855c5321e75385f3a07bb4") },
+    {
+      id: "s3",
+      nombre: "Mercedes Sosa",
+      foto: D("4a41cc292b5ca1de2b4af49ff87ba96e"),
+    },
     {
       id: "s4",
-      nombre: "Vetusta Morla",
-      foto: D("8682e037612a642d79e06584cb4e1e29"),
+      nombre: "Jimi Hendrix",
+      foto: D("2deec542fc75d5691434c407ee077ff7"),
     },
     {
       id: "s5",
-      nombre: "Kiko Veneno",
-      foto: D("76f5a7ac02d84e5b5e9c7466bc9290fe"),
+      nombre: "Frank Sinatra",
+      foto: D("e22ed29d34715f53323c6d190410a27c"),
     },
   ],
 };
 
 /**
- * Miniatura del cromo para la landing: cromo real escalado a la mitad,
- * con fondo + gradiente igual que en la vista de compartir, y fotos reales
- * de Deezer servidas a través del proxy /api/foto.
+ * Miniatura del cromo para la landing: cromo real escalado, con fondo +
+ * gradiente, y fotos reales de Deezer servidas a través del proxy /api/foto.
  */
 export function CromoDemo() {
-  // Medimos la altura real del cromo (varía si se cambia el contenido o
-  // las dimensiones de CromoFinal) para que el wrapper escalado reserve
-  // exactamente el espacio justo.
+  // Medimos la altura real del cromo para que el wrapper escalado reserve
+  // el espacio exacto y no se corte el footer.
   const cromoRef = useRef<HTMLDivElement>(null);
   const [alto, setAlto] = useState(720);
   useEffect(() => {
