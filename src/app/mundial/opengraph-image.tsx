@@ -11,6 +11,11 @@ export const contentType = "image/png";
 // que Satori (motor de next/og) pueda renderizar Bebas Neue, embebemos el
 // .ttf que vive co-localizado en este directorio. Edge runtime es el modo
 // soportado oficialmente por Next para `fetch(new URL(..., import.meta.url))`.
+//
+// Nota sobre las estrellas: Satori no hace font-fallback automático, así que
+// el glifo ★ (U+2605) sale como rectángulo con X si la única fuente cargada
+// es Bebas (que no lo incluye). Las dibujamos como SVG inline para evitar
+// depender de qué fuentes tenga el motor de render.
 export default async function OGImage() {
   const bebas = await fetch(
     new URL("./BebasNeue-Regular.ttf", import.meta.url)
@@ -32,7 +37,7 @@ export default async function OGImage() {
           overflow: "hidden",
         }}
       >
-        {/* "2026" decorativo gigante: marca de agua dorada al 8% como en la
+        {/* "2026" decorativo gigante: marca de agua dorada al 9% como en la
             landing. Va anclado arriba a la derecha, fuera del flujo. */}
         <div
           style={{
@@ -63,14 +68,23 @@ export default async function OGImage() {
         >
           <div
             style={{
-              color: "#D4A22E",
-              fontSize: 28,
-              letterSpacing: 12,
-              marginBottom: 18,
               display: "flex",
+              alignItems: "center",
+              gap: 14,
+              marginBottom: 18,
             }}
           >
-            ★ MUNDIAL MUSICAL 2026 ★
+            <Estrella size={22} color="#D4A22E" />
+            <span
+              style={{
+                color: "#D4A22E",
+                fontSize: 28,
+                letterSpacing: 12,
+              }}
+            >
+              MUNDIAL MUSICAL 2026
+            </span>
+            <Estrella size={22} color="#D4A22E" />
           </div>
 
           <div
@@ -99,7 +113,7 @@ export default async function OGImage() {
           </div>
         </div>
 
-        {/* Pie: URL y autoría, alineados con la voz de la landing. */}
+        {/* Pie: URL y autoría. */}
         <div
           style={{
             position: "absolute",
@@ -112,17 +126,22 @@ export default async function OGImage() {
         >
           <div
             style={{
-              color: "#0a0a0a",
-              fontSize: 28,
-              letterSpacing: 6,
               display: "flex",
               alignItems: "center",
               gap: 14,
             }}
           >
-            <span style={{ color: "#D4A22E" }}>★</span>
-            <span>ARTUROPANIAGUA.COM/MUNDIAL</span>
-            <span style={{ color: "#D4A22E" }}>★</span>
+            <Estrella size={22} color="#D4A22E" />
+            <span
+              style={{
+                color: "#0a0a0a",
+                fontSize: 28,
+                letterSpacing: 6,
+              }}
+            >
+              ARTUROPANIAGUA.COM/MUNDIAL
+            </span>
+            <Estrella size={22} color="#D4A22E" />
           </div>
           <div
             style={{
@@ -148,5 +167,22 @@ export default async function OGImage() {
         },
       ],
     }
+  );
+}
+
+// Estrella de cinco puntas dibujada como SVG, independiente de la fuente.
+function Estrella({ size, color }: { size: number; color: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      style={{ display: "flex" }}
+    >
+      <path
+        d="M12 2.5l2.95 6.32 6.55 0.74-4.92 4.63 1.36 6.81L12 17.77l-5.94 3.23 1.36-6.81-4.92-4.63 6.55-0.74z"
+        fill={color}
+      />
+    </svg>
   );
 }
