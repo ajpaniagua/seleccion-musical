@@ -8,6 +8,10 @@ const D = (hash: string) =>
   `https://cdn-images.dzcdn.net/images/artist/${hash}/1000x1000-000000-80-0-0.jpg`;
 
 const HIMNO = { titulo: "Imagine", artista: "John Lennon" };
+const SELECCIONADOR = {
+  nombre: "Quincy Jones",
+  foto: D("71a51858525f1418ed4cb894690ab20e"),
+};
 
 const DELANTEROS = [
   { nombre: "David Bowie", foto: D("8301a6a09a24f4bb35950c59717defa0") },
@@ -58,10 +62,18 @@ export function CromoDemo() {
         fontFamily: "'Inter', sans-serif",
       }}
     >
-      {/* HIMNO */}
-      <div style={{ padding: "14px 14px 12px" }}>
+      {/* HIMNO + SELECCIONADOR EN FILA */}
+      <div
+        style={{
+          padding: "14px 14px 12px",
+          display: "flex",
+          gap: 8,
+          alignItems: "stretch",
+        }}
+      >
         <div
           style={{
+            flex: 1.4,
             background: COLORS.text,
             color: COLORS.bg,
             padding: "10px 12px",
@@ -82,7 +94,7 @@ export function CromoDemo() {
           </div>
           <div
             style={{
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: 900,
               fontStyle: "italic",
               color: COLORS.gold,
@@ -95,13 +107,72 @@ export function CromoDemo() {
           </div>
           <div
             style={{
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: 700,
               color: COLORS.bg,
               letterSpacing: 0.3,
             }}
           >
             {HIMNO.artista.toUpperCase()}
+          </div>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            background: `linear-gradient(135deg, ${COLORS.gold}15 0%, transparent 100%)`,
+            padding: "8px 10px",
+            borderRadius: 6,
+            border: `1.5px dashed ${COLORS.gold}`,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 4,
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: "50%",
+              background: COLORS.bg,
+              border: `2px solid ${COLORS.gold}`,
+              overflow: "hidden",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/api/foto?url=${encodeURIComponent(SELECCIONADOR.foto)}`}
+              alt={SELECCIONADOR.nombre}
+              crossOrigin="anonymous"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                fontSize: 7,
+                letterSpacing: 1.5,
+                color: COLORS.gold,
+                fontWeight: 900,
+              }}
+            >
+              ★ SELECCIONADOR
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 900,
+                fontStyle: "italic",
+                letterSpacing: -0.3,
+                color: COLORS.text,
+                lineHeight: 1,
+                marginTop: 2,
+              }}
+            >
+              {SELECCIONADOR.nombre}
+            </div>
           </div>
         </div>
       </div>
