@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CromoDemo } from "@/components/CromoDemo";
 import { COLORS } from "@/lib/colores";
+import { TEXTOS } from "@/lib/copys";
 
 export const metadata: Metadata = {
   title: "La selección musical de mi vida · Mundial Musical 2026",
@@ -84,8 +85,7 @@ export default function MundialPage() {
           lineHeight: 1.5,
         }}
       >
-        Arma tu propia selección con los músicos que han sido importantes en tu vida.
-        Un himno, un seleccionador, un once titular y un banquillo de lujo.
+        {TEXTOS.landingIntro}
       </p>
 
       <div style={{ marginTop: 32 }}>
@@ -100,7 +100,7 @@ export default function MundialPage() {
           marginTop: 10,
         }}
       >
-        Así se verá tu cromo, listo para Stories.
+        {TEXTOS.landingDemoNota}
       </div>
 
       <Link

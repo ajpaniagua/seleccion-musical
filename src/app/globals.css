@@ -30,3 +30,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Evita viudas: nunca dejar una palabra sola en la última línea de un
+   párrafo. Soportado en Chrome 117+, Safari 17.4+, Firefox 121+. */
+p {
+  text-wrap: pretty;
+}

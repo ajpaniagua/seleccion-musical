@@ -16,6 +16,7 @@ import { CromoFinal } from "@/components/CromoFinal";
 import { SlotJugador } from "@/components/SlotJugador";
 import { guardarSeleccion } from "@/lib/api";
 import { COLORS } from "@/lib/colores";
+import { COPYS, TEXTOS } from "@/lib/copys";
 import {
   compartirArchivo,
   descargarBlob,
@@ -48,29 +49,6 @@ type BuscadorAbierto =
   | { tipo: "campo"; slot: SlotRef }
   | { tipo: "banquillo"; indice: number }
   | null;
-
-const COPYS = {
-  himno: {
-    titulo: "Tu himno",
-    subtitulo:
-      "La canción que mejor te define. La que te emociona desde el primer acorde. La que pondrías para presentarte al mundo.",
-  },
-  seleccionador: {
-    titulo: "Tu seleccionador",
-    subtitulo:
-      "El artista que dirige tu sensibilidad musical. El que te enseñó a escuchar. Tu referente, tu maestro, tu brújula.",
-  },
-  once: {
-    titulo: "Un artista para el once",
-    subtitulo:
-      "Los once artistas que siempre saltan al campo de tu vida. Los que te han marcado de verdad. No los más famosos, los tuyos.",
-  },
-  banquillo: {
-    titulo: "Un suplente",
-    subtitulo:
-      "Los que no son titulares pero también te han hecho vibrar. Tus suplentes de lujo. Los que entran cuando el partido lo pide.",
-  },
-} as const;
 
 export default function CrearPage() {
   const [seleccion, setSeleccion] = useSeleccionPersistida();
@@ -277,8 +255,7 @@ export default function CrearPage() {
             marginRight: "auto",
           }}
         >
-          Arma tu selección con los artistas y canciones que mejor te representan,
-          y comparte tu cromo con el mundo. Solo te llevará 5 minutos.
+          {TEXTOS.constructorIntro}
         </p>
       </header>
 
@@ -380,7 +357,7 @@ export default function CrearPage() {
             textAlign: "center",
           }}
         >
-          💡 Tip: mantén pulsado un jugador para arrastrarlo a otra posición.
+          {TEXTOS.tipDrag}
         </p>
         <Campo
           portero={seleccion.portero}
@@ -402,7 +379,7 @@ export default function CrearPage() {
 
       <Seccion
         titulo="FIRMA"
-        subtitulo="Pon tu @ de Instagram para firmar tu cromo. Es opcional, pero así Arturo podrá comentar tu selección si le encanta."
+        subtitulo={TEXTOS.firmaSubtitulo}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 22, fontWeight: 900, color: COLORS.text }}>@</span>
@@ -894,9 +871,7 @@ function VistaCromo({
           textAlign: "center",
         }}
       >
-        {movil
-          ? "Pulsa el botón para abrir el panel de compartir y subirla a Stories, WhatsApp o X."
-          : "Pulsa el botón para descargar la imagen. Luego súbela a Stories, X o WhatsApp."}
+        {movil ? TEXTOS.notaDescargarMovil : TEXTOS.notaDescargarDesktop}
       </p>
 
       {/* Prompt para compartir con Arturo: aparece cuando el usuario ya ha
@@ -944,11 +919,12 @@ function VistaCromo({
                 fontStyle: "normal",
                 fontWeight: 900,
                 textDecoration: "none",
+                whiteSpace: "nowrap",
               }}
             >
               @ajpaniagua
             </a>
-            . Arturo comentará las selecciones más interesantes.
+            . Arturo comentará las selecciones más{"\u00a0"}interesantes.
           </p>
         </div>
       )}
