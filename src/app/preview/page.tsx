@@ -128,12 +128,15 @@ export default function PreviewPage() {
           banquillo de lujo. <strong>Solo te llevará 5 minutos.</strong>
         </p>
 
-        {/* Cromo como héroe central */}
+        {/* Cromo como héroe central. El scale 1.2 no reserva espacio en el
+            layout, así que reservamos un padding-bottom equivalente para que
+            el CTA siguiente no se solape. */}
         <div
           style={{
             marginTop: 32,
             transform: "scale(1.2)",
             transformOrigin: "top",
+            paddingBottom: "20%",
           }}
         >
           <CromoDemo />
@@ -143,7 +146,7 @@ export default function PreviewPage() {
           href="/mundial/crear"
           style={{
             display: "inline-block",
-            marginTop: 96,
+            marginTop: 48,
             background: COLORS.text,
             color: COLORS.bg,
             padding: "20px 52px",
