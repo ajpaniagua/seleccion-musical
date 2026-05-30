@@ -164,12 +164,13 @@ export default function LegalPage() {
             </li>
           </ul>
           <p>
-            <strong>No guardamos</strong> tu dirección IP en claro, ni tu correo
-            electrónico, ni ningún dato de geolocalización, ni te asociamos con
-            cookies publicitarias. No hay perfilado, ni venta de datos, ni
+            <strong>No guardamos</strong> tu correo electrónico, ni tu dirección
+            IP en claro en nuestra propia base de datos, ni datos de
+            geolocalización detallados. No te asociamos con cookies
+            publicitarias. No hay perfilado individual, ni venta de datos, ni
             comunicación a terceros con fines comerciales más allá del
-            procesamiento agregado y anónimo descrito en la sección
-            &ldquo;Cookies y analítica&rdquo;.
+            procesamiento agregado descrito en la sección &ldquo;Cookies y
+            analítica&rdquo;.
           </p>
         </Bloque>
 
@@ -192,23 +193,44 @@ export default function LegalPage() {
 
         <Bloque titulo="COOKIES Y ANALÍTICA">
           <p>
-            Esta web utiliza una única cookie técnica, <code>ms_vid</code>, que
+            Esta web utiliza una cookie técnica propia, <code>ms_vid</code>, que
             almacena un identificador aleatorio durante un año. No es una cookie
             publicitaria ni de analítica de terceros: forma parte del mecanismo
             anti-duplicado descrito arriba.
           </p>
           <p>
-            Para medir el número de visitas y entender qué páginas se consultan,
-            usamos <strong>Vercel Web Analytics</strong>. Es una herramienta de
-            analítica agregada y anónima que <strong>no instala cookies</strong>{" "}
-            ni utiliza identificadores persistentes en tu navegador. No registra
-            tu IP en claro, no construye un perfil de tu actividad y no comparte
-            datos con redes publicitarias. Por esta razón no necesitamos
-            mostrarte un banner de consentimiento de cookies.
+            Para entender qué partes de la web funcionan y cuáles no, usamos
+            dos herramientas de analítica:
+          </p>
+          <ul style={listaStyle}>
+            <li>
+              <strong>Vercel Web Analytics</strong>: métricas de rendimiento
+              técnico (Web Vitals) y conteo de visitas. No instala cookies.
+            </li>
+            <li>
+              <strong>Google Analytics 4</strong>: métricas editoriales
+              agregadas (qué páginas se visitan, desde qué dispositivos, qué
+              referencias traen tráfico). Instala las cookies de terceros{" "}
+              <code>_ga</code> y <code>_ga_*</code> en tu navegador, con una
+              duración de hasta dos años. Activamos la anonimización de IP
+              (<code>anonymize_ip</code>) para que Google no procese tu
+              dirección IP completa.
+            </li>
+          </ul>
+          <p>
+            <strong>Por qué no mostramos banner de consentimiento</strong>: este
+            es un proyecto editorial pequeño, sin fines publicitarios, sin
+            cesión de datos a terceros con fines comerciales y sin perfilado
+            individual. Los datos que llegan a Google Analytics se usan
+            exclusivamente para tomar decisiones editoriales sobre el proyecto.
+            Al continuar usando la web entendemos que aceptas estas cookies; si
+            no es así, puedes bloquearlas desde la configuración de tu
+            navegador o utilizar una extensión como uBlock Origin o Privacy
+            Badger.
           </p>
           <p>
-            No usamos Google Analytics, Meta Pixel ni ningún otro sistema de
-            seguimiento más allá de lo descrito aquí.
+            No usamos Meta Pixel ni ningún otro sistema de seguimiento más
+            allá de lo descrito aquí.
           </p>
         </Bloque>
 

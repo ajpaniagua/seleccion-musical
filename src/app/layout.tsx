@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 // Base usada por Next para resolver URLs absolutas de Open Graph, Twitter
@@ -25,10 +26,14 @@ export default function RootLayout({
     <html lang="es">
       <body>
         {children}
-        {/* Vercel Analytics: pageviews agregados sin cookies de seguimiento.
-            No requiere banner de consentimiento. La política de privacidad
-            (/mundial/legal) lo declara como único procesador. */}
+        {/* Vercel Analytics: pageviews + Web Vitals, sin cookies. Sirve
+            como métrica de calidad técnica (LCP, INP, CLS...). */}
         <Analytics />
+        {/* Google Analytics 4: métricas editoriales completas (eventos,
+            funnels, audiencias). Inyecta cookies `_ga` y `_ga_*`. Sin
+            banner por decisión editorial; la página /mundial/legal lo
+            declara y describe qué cookies pone. */}
+        <GoogleAnalytics />
       </body>
     </html>
   );
