@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "La selección musical de mi vida · Mundial Musical 2026",
   description:
     "Arma tu selección musical: un himno, un seleccionador, once titulares y cinco suplentes. Comparte tu cromo con el mundo.",
+  alternates: {
+    canonical: "/mundial",
+  },
   openGraph: {
     title: "La selección musical de mi vida",
     description:
