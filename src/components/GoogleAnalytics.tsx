@@ -5,10 +5,9 @@ import Script from "next/script";
  * `NEXT_PUBLIC_GA_ID` está definida. Si no, no inyecta nada (útil en
  * desarrollo local para no contaminar las métricas).
  *
- * Decisión consciente: lanzamos sin banner de cookies. La página
- * /mundial/legal lo declara explícitamente y describe qué cookies pone
- * GA4 (`_ga`, `_ga_*`). Si en algún momento queremos añadir consent mode,
- * este es el componente a tocar.
+ * Activamos `anonymize_ip` por defecto. Las cookies que pone GA4 están
+ * declaradas en la página /mundial/legal. Si más adelante queremos
+ * integrar Consent Mode, este es el componente a tocar.
  */
 export function GoogleAnalytics() {
   const id = process.env.NEXT_PUBLIC_GA_ID;

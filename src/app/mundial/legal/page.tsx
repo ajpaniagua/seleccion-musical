@@ -194,43 +194,21 @@ export default function LegalPage() {
         <Bloque titulo="COOKIES Y ANALÍTICA">
           <p>
             Esta web utiliza una cookie técnica propia, <code>ms_vid</code>, que
-            almacena un identificador aleatorio durante un año. No es una cookie
-            publicitaria ni de analítica de terceros: forma parte del mecanismo
-            anti-duplicado descrito arriba.
+            almacena un identificador aleatorio durante un año como parte del
+            mecanismo anti-duplicado descrito arriba.
           </p>
           <p>
-            Para entender qué partes de la web funcionan y cuáles no, usamos
-            dos herramientas de analítica:
-          </p>
-          <ul style={listaStyle}>
-            <li>
-              <strong>Vercel Web Analytics</strong>: métricas de rendimiento
-              técnico (Web Vitals) y conteo de visitas. No instala cookies.
-            </li>
-            <li>
-              <strong>Google Analytics 4</strong>: métricas editoriales
-              agregadas (qué páginas se visitan, desde qué dispositivos, qué
-              referencias traen tráfico). Instala las cookies de terceros{" "}
-              <code>_ga</code> y <code>_ga_*</code> en tu navegador, con una
-              duración de hasta dos años. Activamos la anonimización de IP
-              (<code>anonymize_ip</code>) para que Google no procese tu
-              dirección IP completa.
-            </li>
-          </ul>
-          <p>
-            <strong>Por qué no mostramos banner de consentimiento</strong>: este
-            es un proyecto editorial pequeño, sin fines publicitarios, sin
-            cesión de datos a terceros con fines comerciales y sin perfilado
-            individual. Los datos que llegan a Google Analytics se usan
-            exclusivamente para tomar decisiones editoriales sobre el proyecto.
-            Al continuar usando la web entendemos que aceptas estas cookies; si
-            no es así, puedes bloquearlas desde la configuración de tu
-            navegador o utilizar una extensión como uBlock Origin o Privacy
-            Badger.
+            Para medir el uso de la web utilizamos{" "}
+            <strong>Vercel Web Analytics</strong> (métricas técnicas y de
+            visitas, sin cookies) y <strong>Google Analytics 4</strong>{" "}
+            (métricas agregadas de tráfico). Google Analytics instala en tu
+            navegador las cookies <code>_ga</code> y <code>_ga_*</code> con una
+            duración de hasta dos años. La configuración tiene activada la
+            anonimización de IP.
           </p>
           <p>
-            No usamos Meta Pixel ni ningún otro sistema de seguimiento más
-            allá de lo descrito aquí.
+            Puedes bloquear estas cookies desde la configuración de tu
+            navegador o con una extensión como uBlock Origin o Privacy Badger.
           </p>
         </Bloque>
 

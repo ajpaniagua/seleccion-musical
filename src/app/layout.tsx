@@ -29,10 +29,9 @@ export default function RootLayout({
         {/* Vercel Analytics: pageviews + Web Vitals, sin cookies. Sirve
             como métrica de calidad técnica (LCP, INP, CLS...). */}
         <Analytics />
-        {/* Google Analytics 4: métricas editoriales completas (eventos,
-            funnels, audiencias). Inyecta cookies `_ga` y `_ga_*`. Sin
-            banner por decisión editorial; la página /mundial/legal lo
-            declara y describe qué cookies pone. */}
+        {/* Google Analytics 4: métricas editoriales completas. Solo se
+            inyecta si NEXT_PUBLIC_GA_ID está definida en el entorno.
+            Las cookies que pone están declaradas en /mundial/legal. */}
         <GoogleAnalytics />
       </body>
     </html>
