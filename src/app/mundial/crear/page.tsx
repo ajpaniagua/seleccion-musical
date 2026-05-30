@@ -2,7 +2,7 @@
 
 import {
   DndContext,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -63,11 +63,14 @@ export default function CrearPage() {
   const progresoPct = Math.round((rellenosObligatorios / TOTAL_OBLIGATORIOS) * 100);
   const tieneAlgo = seleccionTieneAlgo(seleccion);
 
+  // MouseSensor + TouchSensor (en vez de PointerSensor + TouchSensor) para
+  // que iOS Safari no dispare ambos. iOS emula pointer events desde touch,
+  // así que un PointerSensor con `distance` se activa en cuanto el dedo se
+  // mueve 6px y le come el turno al TouchSensor con delay, rompiendo tanto
+  // el scroll vertical sobre los slots como el long-press intencional para
+  // arrastrar. MouseSensor solo se dispara con eventos de ratón reales.
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    // En móvil: press-and-hold de 250ms y permitimos hasta 14px de "wobble"
-    // del dedo antes de cancelar. Más generoso que los defaults para que el
-    // drag se active con confianza sin pelear con el scroll vertical.
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 14 } })
   );
 
