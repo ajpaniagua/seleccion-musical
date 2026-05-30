@@ -76,6 +76,12 @@ export function SlotJugador({
     // Permitimos scroll vertical hasta que el drag se active explícitamente.
     // dnd-kit (TouchSensor con delay) bloquea touchAction al activarse.
     touchAction: "manipulation",
+    // iOS: bloquear el menú contextual nativo (compartir/guardar/copiar) y
+    // la selección de texto para que el long-press dispare el drag, no el
+    // share sheet del sistema.
+    WebkitTouchCallout: "none",
+    WebkitUserSelect: "none",
+    userSelect: "none",
     transform: draggable.transform
       ? `translate3d(${draggable.transform.x}px, ${draggable.transform.y}px, 0)`
       : undefined,
@@ -132,7 +138,22 @@ export function SlotJugador({
               src={artista.foto}
               alt={artista.nombre}
               draggable={false}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              onDragStart={(e) => e.preventDefault()}
+              onContextMenu={(e) => e.preventDefault()}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                // iOS Safari: el long-press sobre una <img> abre el panel de
+                // "Compartir / Guardar en Fotos / Copiar" y arranca el preview
+                // a tamaño real, sacando la foto del círculo. Estos cuatro
+                // estilos lo desactivan y dejan que el touch fluya al
+                // wrapper para que dnd-kit pueda capturarlo.
+                WebkitTouchCallout: "none",
+                WebkitUserSelect: "none",
+                userSelect: "none",
+                pointerEvents: "none",
+              }}
             />
           ) : (
             <span
