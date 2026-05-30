@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 // Base usada por Next para resolver URLs absolutas de Open Graph, Twitter
@@ -22,7 +23,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Vercel Analytics: pageviews agregados sin cookies de seguimiento.
+            No requiere banner de consentimiento. La política de privacidad
+            (/mundial/legal) lo declara como único procesador. */}
+        <Analytics />
+      </body>
     </html>
   );
 }
