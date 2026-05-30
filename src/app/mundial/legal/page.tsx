@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Aviso legal y privacidad · La selección musical de mi vida",
   description:
     "Aviso legal, política de privacidad y disclaimer del proyecto editorial La selección musical de mi vida.",
+  alternates: {
+    canonical: "/mundial/legal",
+  },
   robots: { index: true, follow: true },
 };
 
@@ -164,7 +167,9 @@ export default function LegalPage() {
             <strong>No guardamos</strong> tu dirección IP en claro, ni tu correo
             electrónico, ni ningún dato de geolocalización, ni te asociamos con
             cookies publicitarias. No hay perfilado, ni venta de datos, ni
-            comunicación a terceros con fines comerciales.
+            comunicación a terceros con fines comerciales más allá del
+            procesamiento agregado y anónimo descrito en la sección
+            &ldquo;Cookies y analítica&rdquo;.
           </p>
         </Bloque>
 
@@ -185,13 +190,25 @@ export default function LegalPage() {
           </p>
         </Bloque>
 
-        <Bloque titulo="COOKIES">
+        <Bloque titulo="COOKIES Y ANALÍTICA">
           <p>
             Esta web utiliza una única cookie técnica, <code>ms_vid</code>, que
             almacena un identificador aleatorio durante un año. No es una cookie
             publicitaria ni de analítica de terceros: forma parte del mecanismo
-            anti-duplicado descrito arriba. No usamos Google Analytics, Meta
-            Pixel ni ningún otro sistema de seguimiento.
+            anti-duplicado descrito arriba.
+          </p>
+          <p>
+            Para medir el número de visitas y entender qué páginas se consultan,
+            usamos <strong>Vercel Web Analytics</strong>. Es una herramienta de
+            analítica agregada y anónima que <strong>no instala cookies</strong>{" "}
+            ni utiliza identificadores persistentes en tu navegador. No registra
+            tu IP en claro, no construye un perfil de tu actividad y no comparte
+            datos con redes publicitarias. Por esta razón no necesitamos
+            mostrarte un banner de consentimiento de cookies.
+          </p>
+          <p>
+            No usamos Google Analytics, Meta Pixel ni ningún otro sistema de
+            seguimiento más allá de lo descrito aquí.
           </p>
         </Bloque>
 
