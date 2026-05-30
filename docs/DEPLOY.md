@@ -103,7 +103,7 @@ En el dashboard de Cloudflare:
 // SiteGround sin tocar nada.
 const ORIGEN = "https://seleccion-musical.vercel.app";
 
-const PREFIJOS_PROXY = ["/mundial", "/_next", "/api"];
+const PREFIJOS_PROXY = ["/mundial", "/_next", "/api", "/_vercel"];
 
 export default {
   async fetch(request) {
@@ -147,15 +147,18 @@ export default {
 
 En el Worker recién creado:
 
-1. **Settings → Triggers → Routes → Add route**, añadir las **tres** rutas:
+1. **Settings → Triggers → Routes → Add route**, añadir las **cuatro** rutas:
    - `arturopaniagua.com/mundial*` · Zone: `arturopaniagua.com`
    - `arturopaniagua.com/_next/*` · Zone: `arturopaniagua.com`
    - `arturopaniagua.com/api/*` · Zone: `arturopaniagua.com`
+   - `arturopaniagua.com/_vercel/*` · Zone: `arturopaniagua.com`
 
-> Las tres apuntan al mismo Worker. Es necesario incluir `/_next/*` y
+> Las cuatro apuntan al mismo Worker. Es necesario incluir `/_next/*` y
 > `/api/*` porque Next.js sirve sus assets y endpoints desde esos paths sin
-> el prefijo `/mundial`. Si la web principal de Arturo no usa `/api/`, no
-> habrá colisión (caso típico en WordPress).
+> el prefijo `/mundial`. `/_vercel/*` cubre el script del paquete
+> `@vercel/analytics` (`/_vercel/insights/script.js`) y su endpoint de
+> ingesta de eventos. Si la web principal de Arturo no usa `/api/` ni
+> `/_vercel/`, no habrá colisión (caso típico en WordPress).
 
 ### 7. Verificación
 
