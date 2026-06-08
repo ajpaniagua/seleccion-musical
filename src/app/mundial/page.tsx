@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AvisoInApp } from "@/components/AvisoInApp";
 import { CromoDemo } from "@/components/CromoDemo";
 import { COLORS } from "@/lib/colores";
 import { FUENTES } from "@/lib/tipografias";
@@ -69,6 +70,7 @@ export default function MundialPage() {
           textAlign: "center",
         }}
       >
+        <AvisoInApp />
         <div
           style={{
             color: COLORS.gold,

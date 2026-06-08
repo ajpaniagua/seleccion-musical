@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/core";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AvisoInApp } from "@/components/AvisoInApp";
 import { Banquillo } from "@/components/Banquillo";
 import { Buscador } from "@/components/Buscador";
 import { Campo, type SlotRef } from "@/components/Campo";
@@ -223,6 +224,7 @@ export default function CrearPage() {
         padding: "32px 16px 80px",
       }}
     >
+      <AvisoInApp />
       <header style={{ textAlign: "center", marginBottom: 22 }}>
         <div
           style={{
