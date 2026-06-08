@@ -23,6 +23,7 @@ import {
   compartirArchivo,
   descargarBlob,
   esDispositivoMovil,
+  esNavegadorInApp,
   generarPngCromo,
 } from "@/utils/generarPng";
 import {
@@ -717,6 +718,7 @@ function VistaCromo({
   const [generando, setGenerando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
   const [movil, setMovil] = useState(false);
+  const [inApp, setInApp] = useState(false);
   const [escala, setEscala] = useState(1);
   const [alturaCromo, setAlturaCromo] = useState(640);
 
@@ -735,6 +737,7 @@ function VistaCromo({
   // Detecta solo en cliente (esDispositivoMovil necesita navigator)
   useEffect(() => {
     setMovil(esDispositivoMovil());
+    setInApp(esNavegadorInApp());
   }, []);
 
   // El cromo mide 480px de ancho. Si el viewport es menor, escalamos
@@ -778,45 +781,62 @@ function VistaCromo({
 
   const yaGuardada = useRef(false);
 
+  async function generarBlobYGuardar(): Promise<Blob | null> {
+    if (!cromoRef.current) return null;
+    // Guardamos en BD una sola vez por sesión de cromo (idempotente desde la UI).
+    // Si falla la BD seguimos generando el PNG igualmente — el usuario es lo primero.
+    if (!yaGuardada.current) {
+      const r = await guardarSeleccion(seleccion);
+      if (r) yaGuardada.current = true;
+    }
+    // Quitamos el scale durante la captura. html2canvas captura lo que
+    // ve en pantalla, así que con scale aplicado generaría un PNG pequeño.
+    // Sacamos también el cromo de la viewport para que el usuario no vea
+    // el flash a tamaño real.
+    const wrap = cromoRef.current;
+    const prev = {
+      transform: wrap.style.transform,
+      position: wrap.style.position,
+      left: wrap.style.left,
+      top: wrap.style.top,
+      zIndex: wrap.style.zIndex,
+    };
+    wrap.style.transform = "none";
+    wrap.style.position = "fixed";
+    wrap.style.left = "-10000px";
+    wrap.style.top = "0";
+    wrap.style.zIndex = "-1";
+    await new Promise<void>((r) => requestAnimationFrame(() => r()));
+
+    try {
+      return await generarPngCromo(cromoRef.current);
+    } finally {
+      wrap.style.transform = prev.transform;
+      wrap.style.position = prev.position;
+      wrap.style.left = prev.left;
+      wrap.style.top = prev.top;
+      wrap.style.zIndex = prev.zIndex;
+    }
+  }
+
   async function manejarCompartir() {
     if (!cromoRef.current) return;
     setGenerando(true);
     setAviso(null);
     try {
-      // Guardamos en BD una sola vez por sesión de cromo (idempotente desde la UI).
-      // Si falla la BD seguimos generando el PNG igualmente — el usuario es lo primero.
-      if (!yaGuardada.current) {
-        const r = await guardarSeleccion(seleccion);
-        if (r) yaGuardada.current = true;
-      }
-      // Quitamos el scale durante la captura. html2canvas captura lo que
-      // ve en pantalla, así que con scale aplicado generaría un PNG pequeño.
-      // Sacamos también el cromo de la viewport para que el usuario no vea
-      // el flash a tamaño real.
-      const wrap = cromoRef.current;
-      const prev = {
-        transform: wrap.style.transform,
-        position: wrap.style.position,
-        left: wrap.style.left,
-        top: wrap.style.top,
-        zIndex: wrap.style.zIndex,
-      };
-      wrap.style.transform = "none";
-      wrap.style.position = "fixed";
-      wrap.style.left = "-10000px";
-      wrap.style.top = "0";
-      wrap.style.zIndex = "-1";
-      await new Promise<void>((r) => requestAnimationFrame(() => r()));
+      const blob = await generarBlobYGuardar();
+      if (!blob) return;
 
-      let blob: Blob;
-      try {
-        blob = await generarPngCromo(cromoRef.current);
-      } finally {
-        wrap.style.transform = prev.transform;
-        wrap.style.position = prev.position;
-        wrap.style.left = prev.left;
-        wrap.style.top = prev.top;
-        wrap.style.zIndex = prev.zIndex;
+      // Navegadores in-app (Instagram, Facebook…): el share API suele fallar
+      // o lanza el toast "No se puede cargar la página". Forzamos descarga
+      // directa y avisamos al usuario que para subir a Stories conviene
+      // abrir la web en Chrome/Safari.
+      if (inApp) {
+        descargarBlob(blob, nombreArchivo);
+        setAviso(
+          "Imagen descargada. Para subirla a Stories, abre esta web en Chrome o Safari (los tres puntos arriba → Abrir en navegador)."
+        );
+        return;
       }
 
       if (movil) {
@@ -832,6 +852,26 @@ function VistaCromo({
         descargarBlob(blob, nombreArchivo);
         setAviso("Imagen descargada. La encuentras en tu carpeta de descargas.");
       }
+    } catch (e) {
+      console.error("[cromo] error generando PNG:", e);
+      setAviso("No se pudo generar la imagen. Inténtalo de nuevo.");
+    } finally {
+      setGenerando(false);
+    }
+  }
+
+  // Botón secundario para móvil: descarga directa sin pasar por el share
+  // sheet. Es el plan B siempre disponible si el sheet falla, o el plan A
+  // para usuarios que prefieren guardar el PNG y subirlo a mano.
+  async function manejarDescargaDirecta() {
+    if (!cromoRef.current) return;
+    setGenerando(true);
+    setAviso(null);
+    try {
+      const blob = await generarBlobYGuardar();
+      if (!blob) return;
+      descargarBlob(blob, nombreArchivo);
+      setAviso("Imagen descargada. Ya puedes subirla a Stories.");
     } catch (e) {
       console.error("[cromo] error generando PNG:", e);
       setAviso("No se pudo generar la imagen. Inténtalo de nuevo.");
@@ -879,6 +919,27 @@ function VistaCromo({
           <CromoFinal seleccion={seleccion} />
         </div>
       </div>
+      {inApp && (
+        <div
+          style={{
+            maxWidth: 380,
+            padding: "12px 16px",
+            background: "rgba(230, 57, 70, 0.15)",
+            border: `1.5px solid ${COLORS.red}`,
+            borderRadius: 10,
+            color: COLORS.bg,
+            fontFamily: FUENTES.UI,
+            fontSize: 13,
+            lineHeight: 1.5,
+            textAlign: "center",
+            fontWeight: 500,
+          }}
+        >
+          Estás viendo esta web dentro del navegador de Instagram. Para
+          guardar y subir tu cromo sin problemas, ábrelo en Chrome o Safari
+          (toca los tres puntos arriba y elige &ldquo;Abrir en navegador&rdquo;).
+        </div>
+      )}
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
         <button
           type="button"
@@ -920,11 +981,36 @@ function VistaCromo({
         >
           {generando
             ? "GENERANDO…"
-            : movil
-              ? "COMPARTE TU SELECCIÓN"
-              : "DESCARGAR IMAGEN"}
+            : inApp
+              ? "DESCARGAR IMAGEN"
+              : movil
+                ? "COMPARTE TU SELECCIÓN"
+                : "DESCARGAR IMAGEN"}
         </button>
       </div>
+      {movil && !inApp && (
+        <button
+          type="button"
+          onClick={manejarDescargaDirecta}
+          disabled={generando}
+          style={{
+            background: "transparent",
+            color: "rgba(255,255,255,0.85)",
+            border: "none",
+            padding: "4px 8px",
+            fontFamily: FUENTES.UI,
+            fontSize: 13,
+            fontWeight: 500,
+            textDecoration: "underline",
+            textDecorationColor: COLORS.gold,
+            textUnderlineOffset: 4,
+            cursor: generando ? "wait" : "pointer",
+            opacity: generando ? 0.5 : 1,
+          }}
+        >
+          ¿No te funciona compartir? Descarga directa
+        </button>
+      )}
       {aviso && (
         <p
           style={{

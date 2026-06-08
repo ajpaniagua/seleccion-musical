@@ -110,6 +110,22 @@ export function descargarBlob(blob: Blob, nombre: string) {
 }
 
 /**
+ * Detecta si la página está cargada dentro del WebView in-app de Instagram,
+ * Facebook, TikTok o similares. Esos navegadores in-app tienen limitaciones
+ * importantes con `navigator.share()` (especialmente en Android) y a veces
+ * bloquean la descarga directa de blobs, así que conviene avisar al usuario
+ * para que abra la página en Chrome / Safari.
+ */
+export function esNavegadorInApp(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return (
+    /Instagram|FBAN|FBAV|FB_IAB|FB4A|MessengerForiOS|Line\//i.test(ua) ||
+    /TikTok|musical_ly|Twitter|LinkedInApp/i.test(ua)
+  );
+}
+
+/**
  * Heurística simple para detectar dispositivo móvil.
  * Combina User-Agent Client Hints (navegadores modernos) con fallback por UA + touch.
  */
