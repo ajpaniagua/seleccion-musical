@@ -721,6 +721,7 @@ function VistaCromo({
   const [movil, setMovil] = useState(false);
   const [android, setAndroid] = useState(false);
   const [inApp, setInApp] = useState(false);
+  const [imagenPreview, setImagenPreview] = useState<string | null>(null);
   const [escala, setEscala] = useState(1);
   const [alturaCromo, setAlturaCromo] = useState(640);
 
@@ -867,6 +868,18 @@ function VistaCromo({
     try {
       const blob = await generarBlob();
       if (!blob) return;
+
+      if (inApp) {
+        // En navegadores in-app (Instagram, FB…), el método `<a download>` no
+        // descarga: solo abre la imagen en un visor sin opción de guardar.
+        // En cambio, mostrar la imagen como <img> normal SÍ permite que el
+        // long-press del navegador ofrezca "Guardar imagen", que es el único
+        // camino fiable en ese entorno.
+        const url = URL.createObjectURL(blob);
+        setImagenPreview(url);
+        return;
+      }
+
       descargarBlob(blob, nombreArchivo);
       setAviso(
         movil
@@ -879,6 +892,11 @@ function VistaCromo({
     } finally {
       setGenerando(false);
     }
+  }
+
+  function cerrarPreview() {
+    if (imagenPreview) URL.revokeObjectURL(imagenPreview);
+    setImagenPreview(null);
   }
 
   return (
@@ -1161,6 +1179,108 @@ function VistaCromo({
             </a>
             . Arturo comentará las selecciones más{"\u00a0"}interesantes.
           </p>
+        </div>
+      )}
+
+      {/* Modal de preview para in-app browsers: la única vía que SÍ funciona
+          en Instagram/FB para guardar la imagen al dispositivo es mostrarla
+          como <img> y dejar que el long-press del navegador ofrezca
+          "Guardar imagen". El download programático queda bloqueado por el
+          WebView. */}
+      {imagenPreview && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={cerrarPreview}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.92)",
+            zIndex: 1000,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            padding: "16px 16px 32px",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              cerrarPreview();
+            }}
+            style={{
+              alignSelf: "flex-end",
+              background: "rgba(255,255,255,0.15)",
+              color: COLORS.bg,
+              border: "1px solid rgba(255,255,255,0.3)",
+              padding: "8px 14px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 14,
+              letterSpacing: 2,
+              borderRadius: 20,
+              marginBottom: 12,
+              cursor: "pointer",
+            }}
+          >
+            ✕ CERRAR
+          </button>
+
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: `linear-gradient(135deg, ${COLORS.gold}, #b8861f)`,
+              color: COLORS.text,
+              padding: "16px 20px",
+              borderRadius: 12,
+              maxWidth: 360,
+              textAlign: "center",
+              marginBottom: 18,
+              boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: FUENTES.POSTER,
+                fontSize: 18,
+                letterSpacing: 3,
+                marginBottom: 6,
+                fontWeight: 400,
+              }}
+            >
+              👇 MANTÉN PULSADA LA IMAGEN
+            </div>
+            <div
+              style={{
+                fontFamily: FUENTES.UI,
+                fontSize: 14,
+                fontWeight: 500,
+                lineHeight: 1.4,
+              }}
+            >
+              Elige &ldquo;Guardar imagen&rdquo; (Android) o &ldquo;Añadir a
+              Fotos&rdquo; (iOS) para descargarla. Luego ya puedes subirla
+              a Stories.
+            </div>
+          </div>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imagenPreview}
+            alt="Tu selección musical"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: "100%",
+              width: "auto",
+              height: "auto",
+              maxHeight: "75vh",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+              borderRadius: 4,
+            }}
+          />
         </div>
       )}
     </main>
