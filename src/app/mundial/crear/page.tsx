@@ -22,6 +22,7 @@ import { FUENTES } from "@/lib/tipografias";
 import {
   compartirArchivo,
   descargarBlob,
+  esAndroid,
   esDispositivoMovil,
   esNavegadorInApp,
   generarPngCromo,
@@ -718,6 +719,7 @@ function VistaCromo({
   const [generando, setGenerando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
   const [movil, setMovil] = useState(false);
+  const [android, setAndroid] = useState(false);
   const [inApp, setInApp] = useState(false);
   const [escala, setEscala] = useState(1);
   const [alturaCromo, setAlturaCromo] = useState(640);
@@ -737,6 +739,7 @@ function VistaCromo({
   // Detecta solo en cliente (esDispositivoMovil necesita navigator)
   useEffect(() => {
     setMovil(esDispositivoMovil());
+    setAndroid(esAndroid());
     setInApp(esNavegadorInApp());
   }, []);
 
@@ -939,28 +942,29 @@ function VistaCromo({
         </div>
       )}
       {/* Botones de acción.
-          - Desktop: solo "DESCARGAR IMAGEN".
-          - Móvil sin in-app: dos botones grandes - COMPARTIR (share API) y
-            DESCARGAR (siempre funciona, sin depender de share API).
-          - Móvil en in-app browser: solo DESCARGAR (share API falla casi
-            siempre y el botón compartir confundiría más). */}
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          flexWrap: "wrap",
-          justifyContent: "center",
-          width: "100%",
-          maxWidth: 480,
-        }}
-      >
-        {movil && !inApp && (
+          - iOS y desktop (donde el share API es fiable o no aplica):
+            un solo botón principal — el flujo de siempre.
+          - Android sin in-app: dos botones grandes — COMPARTIR (share API)
+            y DESCARGAR (fallback siempre disponible porque en Chrome
+            Android el share falla más a menudo).
+          - In-app browser (Instagram/FB/…): solo DESCARGAR. */}
+      {android && !inApp ? (
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+            justifyContent: "center",
+            width: "100%",
+            maxWidth: 480,
+          }}
+        >
           <button
             type="button"
             onClick={manejarCompartir}
             disabled={generando}
             style={{
-              flex: "1 1 200px",
+              flex: "1 1 180px",
               background: COLORS.gold,
               color: COLORS.text,
               border: `2px solid ${COLORS.text}`,
@@ -977,30 +981,58 @@ function VistaCromo({
           >
             {generando ? "GENERANDO…" : "COMPARTIR"}
           </button>
-        )}
+          <button
+            type="button"
+            onClick={manejarDescargaDirecta}
+            disabled={generando}
+            style={{
+              flex: "1 1 180px",
+              background: COLORS.bg,
+              color: COLORS.text,
+              border: `2px solid ${COLORS.text}`,
+              padding: "16px 20px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 20,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
+              opacity: generando ? 0.7 : 1,
+              cursor: generando ? "wait" : "pointer",
+              boxShadow: `5px 5px 0 ${COLORS.text}`,
+            }}
+          >
+            {generando ? "GENERANDO…" : "DESCARGAR"}
+          </button>
+        </div>
+      ) : (
         <button
           type="button"
-          onClick={manejarDescargaDirecta}
+          onClick={inApp ? manejarDescargaDirecta : manejarCompartir}
           disabled={generando}
           style={{
-            flex: "1 1 200px",
-            background: movil && !inApp ? COLORS.bg : COLORS.gold,
+            background: COLORS.gold,
             color: COLORS.text,
             border: `2px solid ${COLORS.text}`,
-            padding: "16px 20px",
+            padding: "16px 36px",
             fontFamily: FUENTES.POSTER,
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: 400,
-            letterSpacing: 2,
+            letterSpacing: 3,
             borderRadius: 0,
             opacity: generando ? 0.7 : 1,
             cursor: generando ? "wait" : "pointer",
             boxShadow: `5px 5px 0 ${COLORS.text}`,
           }}
         >
-          {generando ? "GENERANDO…" : "DESCARGAR IMAGEN"}
+          {generando
+            ? "GENERANDO…"
+            : inApp
+              ? "DESCARGAR IMAGEN"
+              : movil
+                ? "COMPARTE TU SELECCIÓN"
+                : "DESCARGAR IMAGEN"}
         </button>
-      </div>
+      )}
       <button
         type="button"
         onClick={onVolver}

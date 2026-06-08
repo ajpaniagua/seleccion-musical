@@ -126,6 +126,16 @@ export function esNavegadorInApp(): boolean {
 }
 
 /**
+ * ¿Es un dispositivo Android? Útil para decidir si mostrar el botón explícito
+ * de descarga como fallback (en Chrome Android la Web Share API tiene más
+ * casos de fallo). En iOS la API es fiable y no hace falta.
+ */
+export function esAndroid(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android/i.test(navigator.userAgent || "");
+}
+
+/**
  * Heurística simple para detectar dispositivo móvil.
  * Combina User-Agent Client Hints (navegadores modernos) con fallback por UA + touch.
  */
