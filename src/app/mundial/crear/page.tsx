@@ -781,14 +781,25 @@ function VistaCromo({
 
   const yaGuardada = useRef(false);
 
-  async function generarBlobYGuardar(): Promise<Blob | null> {
+  // Guardamos la selección en BD AL ENTRAR a la vista del cromo (fire-and-forget),
+  // no al pulsar compartir. Esto es crítico para Android: la Web Share API exige
+  // que se llame dentro de la "user activation" del click, y si meto un await
+  // a Supabase (que puede tardar 1-2s) antes de share(), Chrome lo rechaza y
+  // cae al fallback de descarga. Hacerlo aquí garantiza que el click → share
+  // es instantáneo.
+  useEffect(() => {
+    if (yaGuardada.current) return;
+    yaGuardada.current = true;
+    guardarSeleccion(seleccion).catch((e) => {
+      console.error("[cromo] error guardando selección:", e);
+      yaGuardada.current = false;
+    });
+    // Sólo al montar, no en cada cambio
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function generarBlob(): Promise<Blob | null> {
     if (!cromoRef.current) return null;
-    // Guardamos en BD una sola vez por sesión de cromo (idempotente desde la UI).
-    // Si falla la BD seguimos generando el PNG igualmente — el usuario es lo primero.
-    if (!yaGuardada.current) {
-      const r = await guardarSeleccion(seleccion);
-      if (r) yaGuardada.current = true;
-    }
     // Quitamos el scale durante la captura. html2canvas captura lo que
     // ve en pantalla, así que con scale aplicado generaría un PNG pequeño.
     // Sacamos también el cromo de la viewport para que el usuario no vea
@@ -824,33 +835,19 @@ function VistaCromo({
     setGenerando(true);
     setAviso(null);
     try {
-      const blob = await generarBlobYGuardar();
+      const blob = await generarBlob();
       if (!blob) return;
 
-      // Navegadores in-app (Instagram, Facebook…): el share API suele fallar
-      // o lanza el toast "No se puede cargar la página". Forzamos descarga
-      // directa y avisamos al usuario que para subir a Stories conviene
-      // abrir la web en Chrome/Safari.
-      if (inApp) {
+      const compartido = await compartirArchivo(blob, nombreArchivo);
+      if (!compartido) {
+        // El navegador no abrió el sheet (o falló): caemos a descarga directa
+        // para no dejar al usuario sin nada.
         descargarBlob(blob, nombreArchivo);
         setAviso(
-          "Imagen descargada. Para subirla a Stories, abre esta web en Chrome o Safari (los tres puntos arriba → Abrir en navegador)."
+          inApp
+            ? "Compartir no funciona dentro de Instagram. Imagen descargada — ábrela en Galería y súbela a Stories."
+            : "Compartir no estaba disponible. Imagen descargada — súbela manualmente."
         );
-        return;
-      }
-
-      if (movil) {
-        // En móvil: abrir el sheet nativo de compartir. Si el usuario lo cancela
-        // o el navegador no soporta share, caemos a descarga directa.
-        const compartido = await compartirArchivo(blob, nombreArchivo);
-        if (!compartido) {
-          descargarBlob(blob, nombreArchivo);
-          setAviso("Imagen descargada. Ya puedes subirla a Stories.");
-        }
-      } else {
-        // En escritorio: descarga directa, sin sheet del SO.
-        descargarBlob(blob, nombreArchivo);
-        setAviso("Imagen descargada. La encuentras en tu carpeta de descargas.");
       }
     } catch (e) {
       console.error("[cromo] error generando PNG:", e);
@@ -860,18 +857,19 @@ function VistaCromo({
     }
   }
 
-  // Botón secundario para móvil: descarga directa sin pasar por el share
-  // sheet. Es el plan B siempre disponible si el sheet falla, o el plan A
-  // para usuarios que prefieren guardar el PNG y subirlo a mano.
   async function manejarDescargaDirecta() {
     if (!cromoRef.current) return;
     setGenerando(true);
     setAviso(null);
     try {
-      const blob = await generarBlobYGuardar();
+      const blob = await generarBlob();
       if (!blob) return;
       descargarBlob(blob, nombreArchivo);
-      setAviso("Imagen descargada. Ya puedes subirla a Stories.");
+      setAviso(
+        movil
+          ? "Imagen descargada. Ábrela en Galería y súbela a Stories."
+          : "Imagen descargada. La encuentras en tu carpeta de descargas."
+      );
     } catch (e) {
       console.error("[cromo] error generando PNG:", e);
       setAviso("No se pudo generar la imagen. Inténtalo de nuevo.");
@@ -940,77 +938,88 @@ function VistaCromo({
           (toca los tres puntos arriba y elige &ldquo;Abrir en navegador&rdquo;).
         </div>
       )}
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+      {/* Botones de acción.
+          - Desktop: solo "DESCARGAR IMAGEN".
+          - Móvil sin in-app: dos botones grandes - COMPARTIR (share API) y
+            DESCARGAR (siempre funciona, sin depender de share API).
+          - Móvil en in-app browser: solo DESCARGAR (share API falla casi
+            siempre y el botón compartir confundiría más). */}
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          flexWrap: "wrap",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: 480,
+        }}
+      >
+        {movil && !inApp && (
+          <button
+            type="button"
+            onClick={manejarCompartir}
+            disabled={generando}
+            style={{
+              flex: "1 1 200px",
+              background: COLORS.gold,
+              color: COLORS.text,
+              border: `2px solid ${COLORS.text}`,
+              padding: "16px 20px",
+              fontFamily: FUENTES.POSTER,
+              fontSize: 20,
+              fontWeight: 400,
+              letterSpacing: 2,
+              borderRadius: 0,
+              opacity: generando ? 0.7 : 1,
+              cursor: generando ? "wait" : "pointer",
+              boxShadow: `5px 5px 0 ${COLORS.text}`,
+            }}
+          >
+            {generando ? "GENERANDO…" : "COMPARTIR"}
+          </button>
+        )}
         <button
           type="button"
-          onClick={onVolver}
+          onClick={manejarDescargaDirecta}
           disabled={generando}
           style={{
-            background: "transparent",
-            color: COLORS.bg,
-            border: `2px solid ${COLORS.bg}`,
-            padding: "14px 32px",
+            flex: "1 1 200px",
+            background: movil && !inApp ? COLORS.bg : COLORS.gold,
+            color: COLORS.text,
+            border: `2px solid ${COLORS.text}`,
+            padding: "16px 20px",
             fontFamily: FUENTES.POSTER,
             fontSize: 20,
             fontWeight: 400,
-            letterSpacing: 3,
-            borderRadius: 0,
-            opacity: generando ? 0.5 : 1,
-          }}
-        >
-          ← VOLVER A EDITAR
-        </button>
-        <button
-          type="button"
-          onClick={manejarCompartir}
-          disabled={generando}
-          style={{
-            background: COLORS.gold,
-            color: COLORS.text,
-            border: `2px solid ${COLORS.text}`,
-            padding: "14px 32px",
-            fontFamily: FUENTES.POSTER,
-            fontSize: 22,
-            fontWeight: 400,
-            letterSpacing: 3,
+            letterSpacing: 2,
             borderRadius: 0,
             opacity: generando ? 0.7 : 1,
             cursor: generando ? "wait" : "pointer",
             boxShadow: `5px 5px 0 ${COLORS.text}`,
           }}
         >
-          {generando
-            ? "GENERANDO…"
-            : inApp
-              ? "DESCARGAR IMAGEN"
-              : movil
-                ? "COMPARTE TU SELECCIÓN"
-                : "DESCARGAR IMAGEN"}
+          {generando ? "GENERANDO…" : "DESCARGAR IMAGEN"}
         </button>
       </div>
-      {movil && !inApp && (
-        <button
-          type="button"
-          onClick={manejarDescargaDirecta}
-          disabled={generando}
-          style={{
-            background: "transparent",
-            color: "rgba(255,255,255,0.85)",
-            border: "none",
-            padding: "4px 8px",
-            fontFamily: FUENTES.UI,
-            fontSize: 13,
-            fontWeight: 500,
-            textDecoration: "underline",
-            textDecorationColor: COLORS.gold,
-            textUnderlineOffset: 4,
-            cursor: generando ? "wait" : "pointer",
-            opacity: generando ? 0.5 : 1,
-          }}
-        >
-          ¿No te funciona compartir? Descarga directa
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={onVolver}
+        disabled={generando}
+        style={{
+          background: "transparent",
+          color: "rgba(255,255,255,0.8)",
+          border: "none",
+          padding: "8px 16px",
+          fontFamily: FUENTES.POSTER,
+          fontSize: 16,
+          fontWeight: 400,
+          letterSpacing: 2,
+          opacity: generando ? 0.5 : 1,
+          cursor: generando ? "wait" : "pointer",
+        }}
+      >
+        ← VOLVER A EDITAR
+      </button>
       {aviso && (
         <p
           style={{
