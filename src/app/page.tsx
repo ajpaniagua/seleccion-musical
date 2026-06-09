@@ -29,6 +29,44 @@ export const metadata: Metadata = {
   },
 };
 
+// JSON-LD Schema.org para que Google entienda que esto es una herramienta
+// interactiva gratuita, no un artículo. Aumenta las opciones de aparecer
+// en resultados enriquecidos (cards, knowledge panel) y refuerza al autor.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "La selección musical de mi vida",
+  alternateName: "Mundial Musical 2026",
+  description:
+    "Herramienta interactiva donde armas tu propia selección musical en formato fútbol: himno, seleccionador, once titular y banquillo. Generas un cromo listo para compartir en redes sociales.",
+  url: "https://mundial.arturopaniagua.com/",
+  applicationCategory: "MultimediaApplication",
+  applicationSubCategory: "Music",
+  operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript. Requires HTML5.",
+  inLanguage: "es-ES",
+  isAccessibleForFree: true,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "EUR",
+  },
+  creator: {
+    "@type": "Person",
+    name: "Arturo Paniagua",
+    url: "https://arturopaniagua.com",
+    sameAs: [
+      "https://instagram.com/ajpaniagua",
+      "https://twitter.com/ajpaniagua",
+    ],
+  },
+  publisher: {
+    "@type": "Person",
+    name: "Arturo Paniagua",
+    url: "https://arturopaniagua.com",
+  },
+};
+
 export default function MundialPage() {
   return (
     <main
@@ -40,6 +78,10 @@ export default function MundialPage() {
         overflow: "hidden",
       }}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* "2026" decorativo gigante en el fondo, marca de agua tipo poster */}
       <div
         aria-hidden
