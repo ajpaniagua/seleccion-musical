@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "La selección musical de mi vida",
   description:
     "Arma tu propia selección musical en formato Mundial: himno, seleccionador, once titular y banquillo.",
+  verification: {
+    google: "hcDjo6Jp5kCewIKlbNFnXUA_vSZ-CoMEhJ5ALQA4fHY",
+  },
 };
 
 export default function RootLayout({
