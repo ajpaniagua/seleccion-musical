@@ -496,7 +496,7 @@ export default function CrearPage() {
         }}
       >
         <Link
-          href="/mundial/legal"
+          href="/legal"
           style={{
             color: "#666",
             fontWeight: 700,
@@ -1112,7 +1112,7 @@ function VistaCromo({
         }}
       >
         <Link
-          href="/mundial/legal"
+          href="/legal"
           style={{
             color: "rgba(255,255,255,0.7)",
             fontWeight: 700,

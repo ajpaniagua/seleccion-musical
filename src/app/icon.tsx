@@ -4,7 +4,7 @@ export const runtime = "edge";
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
-// Favicon de las rutas /mundial/*. Estrella dorada SVG sobre fondo negro,
+// Favicon del proyecto. Estrella dorada SVG sobre fondo negro,
 // guiño a la franja "★ MUNDIAL MUSICAL 2026 ★" de la landing. Usamos SVG
 // en vez del glifo ★ porque Satori no tiene fallback automático de fuentes
 // y el carácter Unicode saldría como rectángulo con X.

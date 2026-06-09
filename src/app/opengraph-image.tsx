@@ -5,7 +5,7 @@ export const alt = "La selección musical de mi vida";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Reproducimos la estética de la landing (`src/app/mundial/page.tsx`) en
+// Reproducimos la estética de la landing (`src/app/page.tsx`) en
 // formato Open Graph 1200×630: fondo crema, "2026" decorativo gigante al
 // fondo en dorado, titular en Bebas Neue con la sombra dorada/negra. Para
 // que Satori (motor de next/og) pueda renderizar Bebas Neue, embebemos el

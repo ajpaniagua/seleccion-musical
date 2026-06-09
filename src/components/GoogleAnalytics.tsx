@@ -6,7 +6,7 @@ import Script from "next/script";
  * desarrollo local para no contaminar las métricas).
  *
  * Activamos `anonymize_ip` por defecto. Las cookies que pone GA4 están
- * declaradas en la página /mundial/legal. Si más adelante queremos
+ * declaradas en la página /legal. Si más adelante queremos
  * integrar Consent Mode, este es el componente a tocar.
  */
 export function GoogleAnalytics() {

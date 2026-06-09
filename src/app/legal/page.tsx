@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Aviso legal, política de privacidad y disclaimer del proyecto editorial La selección musical de mi vida.",
   alternates: {
-    canonical: "/mundial/legal",
+    canonical: "/legal",
   },
   robots: { index: true, follow: true },
 };
@@ -33,7 +33,7 @@ export default function LegalPage() {
       >
         <nav style={{ marginBottom: 28 }}>
           <Link
-            href="/mundial"
+            href="/"
             style={{
               fontFamily: FUENTES.POSTER,
               fontSize: 14,

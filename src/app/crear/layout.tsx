@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   description:
     "Elige tu himno, tu seleccionador, los once titulares y el banquillo. Genera tu cromo y compártelo en redes sociales.",
   alternates: {
-    canonical: "/mundial/crear",
+    canonical: "/crear",
   },
   openGraph: {
     title: "Arma tu selección musical",
     description:
       "Tu himno, tu seleccionador, tu once. Genera tu cromo y compártelo en cinco minutos.",
-    url: "https://arturopaniagua.com/mundial/crear",
+    url: "https://mundial.arturopaniagua.com/crear",
     siteName: "arturopaniagua.com",
     locale: "es_ES",
     type: "website",

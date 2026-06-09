@@ -8,7 +8,7 @@ import "./globals.css";
 // en un preview o en un dominio distinto; por defecto apunta al dominio
 // definitivo del proyecto.
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://arturopaniagua.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mundial.arturopaniagua.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -31,7 +31,7 @@ export default function RootLayout({
         <Analytics />
         {/* Google Analytics 4: métricas editoriales completas. Solo se
             inyecta si NEXT_PUBLIC_GA_ID está definida en el entorno.
-            Las cookies que pone están declaradas en /mundial/legal. */}
+            Las cookies que pone están declaradas en /legal. */}
         <GoogleAnalytics />
       </body>
     </html>
