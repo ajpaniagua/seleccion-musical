@@ -16,6 +16,7 @@ import { Buscador } from "@/components/Buscador";
 import { Campo, type SlotRef } from "@/components/Campo";
 import { CromoFinal } from "@/components/CromoFinal";
 import { SlotJugador } from "@/components/SlotJugador";
+import { trackEvent } from "@/utils/analytics";
 import { guardarSeleccion } from "@/lib/api";
 import { COLORS } from "@/lib/colores";
 import { COPYS, TEXTOS } from "@/lib/copys";
@@ -179,6 +180,10 @@ export default function CrearPage() {
   function manejarGenerar() {
     if (!valida) return;
     setMostrarCromo(true);
+    trackEvent("cromo_visto", {
+      con_firma: !!seleccion.usuario,
+      con_banquillo: contarRellenosTotales(seleccion) - TOTAL_OBLIGATORIOS > 0,
+    });
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -845,10 +850,13 @@ function VistaCromo({
       if (!blob) return;
 
       const compartido = await compartirArchivo(blob, nombreArchivo);
-      if (!compartido) {
+      if (compartido) {
+        trackEvent("compartir_completado", { metodo: "share_api" });
+      } else {
         // El navegador no abrió el sheet (o falló): caemos a descarga directa
         // para no dejar al usuario sin nada.
         descargarBlob(blob, nombreArchivo);
+        trackEvent("descargar_imagen", { metodo: "fallback_share" });
         setAviso(
           inApp
             ? "Compartir no funciona dentro de Instagram. Imagen descargada — ábrela en Galería y súbela a Stories."
@@ -879,10 +887,14 @@ function VistaCromo({
         // camino fiable en ese entorno.
         const url = URL.createObjectURL(blob);
         setImagenPreview(url);
+        trackEvent("descargar_imagen", { metodo: "inapp_preview" });
         return;
       }
 
       descargarBlob(blob, nombreArchivo);
+      trackEvent("descargar_imagen", {
+        metodo: movil ? "directo_movil" : "directo_desktop",
+      });
       setAviso(
         movil
           ? "Imagen descargada. Ábrela en Galería y súbela a Stories."
